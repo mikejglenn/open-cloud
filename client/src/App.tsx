@@ -1,31 +1,20 @@
-import { useEffect, useState } from 'react';
-import { Theme, Button } from 'react-daisyui';
+import { UserProvider } from './components/UserContext';
+import { Routes, Route } from 'react-router-dom';
+import { Header } from './components/Header';
+import { AuthPage } from './pages/AuthPage';
+import { NotFound } from './pages/NotFound';
 
 export default function App() {
-  const [serverData, setServerData] = useState('');
-
-  useEffect(() => {
-    async function readServerData() {
-      const resp = await fetch('/api/hello');
-      const data = await resp.json();
-
-      console.log('Data from server:', data);
-
-      setServerData(data.message);
-    }
-
-    readServerData();
-  }, []);
-
   return (
-    <>
-      <h1>{serverData}</h1>
-      <Theme dataTheme="dark">
-        <Button color="primary">Click me, dark!</Button>
-      </Theme>
-      <Theme dataTheme="light">
-        <Button color="primary">Click me, light!</Button>
-      </Theme>
-    </>
+    <UserProvider>
+      <Routes>
+        <Route path="/" element={<Header />} />
+        {/* <Route index element={<EntryList />} />
+          <Route path="details/:entryId" element={<EntryForm />} /> */}
+        <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
+        <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </UserProvider>
   );
 }
