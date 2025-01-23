@@ -35,12 +35,10 @@ export function RegistrationForm() {
   }
 
   return (
-    <Hero style={{ margin: '0 auto' }}>
-      <Hero.Content className="flex-col lg:flex-row-reverse">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Register now!</h1>
-        </div>
-        <Card className="flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+    <Hero>
+      <Hero.Content>
+        <h1>Register now!</h1>
+        <Card>
           <Card.Body>
             <Form onSubmit={handleSubmit}>
               <Form.Label title="Username" />
@@ -57,7 +55,9 @@ export function RegistrationForm() {
                 type="password"
                 className="input-bordered"
               />
-              <Button disabled={isLoading}>Register</Button>
+              <Button disabled={isLoading} className="btn-primary block">
+                Register
+              </Button>
             </Form>
           </Card.Body>
         </Card>
