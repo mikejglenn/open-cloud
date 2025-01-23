@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User } from './UserContext';
+import { Button, Card, Form, Hero, Input } from 'react-daisyui';
 
 export function RegistrationForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,37 +35,33 @@ export function RegistrationForm() {
   }
 
   return (
-    <div className="container">
-      <h2 className="text-xl font-bold">Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-wrap mb-1">
-          <div className="w-1/2">
-            <label className="mb-1 block">
-              Username
-              <input
+    <Hero>
+      <Hero.Content>
+        <h1>Register now!</h1>
+        <Card>
+          <Card.Body>
+            <Form onSubmit={handleSubmit}>
+              <Form.Label title="Username" />
+              <Input
                 required
                 name="username"
                 type="text"
-                className="block border border-gray-600 rounded p-2 h-8 w-full mb-2"
+                className="input-bordered"
               />
-            </label>
-            <label className="mb-1 block">
-              Password
-              <input
+              <Form.Label title="Password" />
+              <Input
                 required
                 name="password"
                 type="password"
-                className="block border border-gray-600 rounded p-2 h-8 w-full mb-2"
+                className="input-bordered"
               />
-            </label>
-          </div>
-        </div>
-        <button
-          disabled={isLoading}
-          className="align-middle text-center border rounded py-1 px-3 bg-blue-600 text-white">
-          Register
-        </button>
-      </form>
-    </div>
+              <Button disabled={isLoading} className="btn-primary block">
+                Register
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Hero.Content>
+    </Hero>
   );
 }
