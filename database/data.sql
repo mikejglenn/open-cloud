@@ -9,3 +9,6 @@
 --      ('Learn to code', false),
 --      ('Build projects', false),
 --      ('Get a job', false);
+
+insert into "accounts" ("userId", "name", "provider", "account", "accessKey", "secretKey")
+values (1, 'mikelfz', 'AWS', '123123123123', '', '')

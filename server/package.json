@@ -9,6 +9,7 @@
     "lint": "eslint . --ext ts,js --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@aws-sdk/client-ec2": "^3.731.1",
     "argon2": "^0.40.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
