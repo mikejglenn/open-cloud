@@ -1,3 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* stylelint-disable */
+/* prettier-ignore */
+@import "tailwindcss";
+@plugin "daisyui";
+/* stylelint-enable */
