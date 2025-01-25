@@ -1,7 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, useUser } from './useUser';
-import { Button, Card, Form, Hero, Input } from 'react-daisyui';
 
 type AuthData = {
   user: User;
@@ -39,33 +38,33 @@ export function SignInForm() {
   }
 
   return (
-    <Hero>
-      <Hero.Content>
+    <div className="hero">
+      <div className="hero-content">
         <h1>Sign In</h1>
-        <Card>
-          <Card.Body>
-            <Form onSubmit={handleSubmit}>
-              <Form.Label title="Username" />
-              <Input
+        <div className="card">
+          <div className="card-body">
+            <form onSubmit={handleSubmit}>
+              <label title="Username" />
+              <input
                 required
                 name="username"
                 type="text"
                 className="input-bordered"
               />
-              <Form.Label title="Password" />
-              <Input
+              <label title="Password" />
+              <input
                 required
                 name="password"
                 type="password"
                 className="input-bordered"
               />
-              <Button disabled={isLoading} className="btn-primary block">
+              <button disabled={isLoading} className="btn-primary block">
                 Sign In
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Hero.Content>
-    </Hero>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
