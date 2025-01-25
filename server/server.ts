@@ -3,9 +3,9 @@ import express from 'express';
 import pg from 'pg';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 import { ClientError, errorMiddleware } from './lib/index.js';
-import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2';
+import { decryptText } from './ crypto-text.js';
+import { DescribeInstancesCommand, EC2Client, Tag } from '@aws-sdk/client-ec2';
 
 type User = {
   userId: number;
@@ -97,29 +97,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
   }
 });
 
-const EncryptionKey = Buffer.from(
-  process.env.ENCRYPTION_KEY.split(',').map(Number)
-);
-// const ivLength = 16;
-
-// function encryptText(text: string): string {
-//   const iv = crypto.randomBytes(ivLength);
-//   const cipher = crypto.createCipheriv('aes-256-cbc', EncryptionKey, iv);
-//   let encrypted = cipher.update(text, 'utf8', 'hex');
-//   encrypted += cipher.final('hex');
-//   return iv.toString('hex') + ':' + encrypted;
-// }
-
-function decryptText(encryptedText: string): string {
-  const [ivHex, encryptedData] = encryptedText.split(':');
-  const iv = Buffer.from(ivHex, 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-cbc', EncryptionKey, iv);
-  let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
-}
-
-async function getAccountByAccountId(accountId: number): Account {
+async function getAccountByAccountId(accountId: number): Promise<Account> {
   const sql = `
       select *
         from "accounts"
@@ -129,6 +107,29 @@ async function getAccountByAccountId(accountId: number): Account {
   const account = result.rows[0];
   return account;
 }
+
+function getNameTagValue(tags: Tag[]): Tag['Value'] {
+  if (!tags) {
+    return '';
+  }
+  for (const tag of tags) {
+    if (tag.Key === 'Name') {
+      return tag.Value;
+    }
+  }
+  return '';
+}
+
+// function getTags(tags: Tag[]): string {
+//   if (tags === null) {
+//     return '';
+//   }
+//   const tagDict: Record<string, string> = {};
+//   for (const tag of tags) {
+//     tagDict[tag.Key] = tag.Value;
+//   }
+//   return JSON.stringify(tagDict);
+// }
 
 app.get('/api/aws/virtual-machines', async (req, res, next) => {
   try {
@@ -140,9 +141,31 @@ app.get('/api/aws/virtual-machines', async (req, res, next) => {
         secretAccessKey: decryptText(account.secretKey),
       },
     });
+    const instanceList = [];
     const command = new DescribeInstancesCommand();
-    const instanceList = await client.send(command);
-    res.json(instanceList.Reservations[0].Instances);
+    const response = await client.send(command);
+    const { Reservations } = response;
+    if (Reservations) {
+      for (const reservation of Reservations) {
+        instanceList.push(...(reservation.Instances ?? []));
+      }
+    }
+    const instancesInfo = [];
+    for (const instance of instanceList) {
+      instancesInfo.push({
+        name: getNameTagValue(instance.Tags ?? []),
+        instanceId: instance.InstanceId,
+        region: instance.Placement?.AvailabilityZone,
+        vpcId: instance.VpcId,
+        subnetId: instance.SubnetId,
+        state: instance.State?.Name,
+        type: instance.InstanceType,
+        os: instance.PlatformDetails,
+        privateIp: instance.PrivateIpAddress,
+        publicIp: instance.PublicIpAddress,
+      });
+    }
+    res.json(instancesInfo);
   } catch (err) {
     next(err);
   }
