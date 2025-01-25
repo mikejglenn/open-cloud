@@ -1,6 +1,5 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from './useUser';
-import { Navbar, Button } from 'react-daisyui';
 
 export function Header() {
   const { user, handleSignOut } = useUser();
@@ -9,7 +8,7 @@ export function Header() {
   return (
     <>
       <h1>Open Cloud</h1>
-      <Navbar>
+      <nav>
         {!user && (
           <>
             <Link to="/sign-up">Sign Up</Link>
@@ -20,16 +19,16 @@ export function Header() {
           <>
             <Link to="/inventory">Inventory</Link>
             <Link to="/cost">Cost</Link>
-            <Button
+            <button
               onClick={() => {
                 handleSignOut();
                 navigate('/');
               }}>
               Sign Out
-            </Button>
+            </button>
           </>
         )}
-      </Navbar>
+      </nav>
       <Outlet />
     </>
   );
