@@ -1,38 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
-import pg from 'pg';
-import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import { ClientError, errorMiddleware } from './lib/index.js';
-import { decryptText } from './ crypto-text.js';
-import { DescribeInstancesCommand, EC2Client, Tag } from '@aws-sdk/client-ec2';
+import { ClientError, errorMiddleware, authMiddleware } from './lib';
+import { User, Auth, userSignIn, userSignUp, PayloadForToken } from './user';
+import { Account, getAccountByAccountId } from './account';
+import { getAllVMs } from './virtual-machines';
 
-type User = {
-  userId: number;
-  username: string;
-  hashedPassword: string;
-};
-type Auth = {
-  username: string;
-  password: string;
-};
-type Account = {
-  accountId: number;
-  userId: number;
-  name: string;
-  provider: string;
-  account: string;
-  accessKey: string;
-  secretKey: string;
-};
-
-const hashKey = process.env.TOKEN_SECRET;
+export const hashKey = process.env.TOKEN_SECRET;
 if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
-
-const db = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
 
 const app = express();
 
@@ -52,15 +27,7 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
     if (!username || !password) {
       throw new ClientError(400, 'username and password are required fields');
     }
-    const hashedPassword = await argon2.hash(password);
-    const sql = `
-      insert into "users" ("username", "hashedPassword")
-      values ($1, $2)
-      returning "userId", "username", "createdAt";
-    `;
-    const params = [username, hashedPassword];
-    const result = await db.query<User>(sql, params);
-    const [user] = result.rows;
+    const user = (await userSignUp(username, password)) as User;
     res.status(201).json(user);
   } catch (err) {
     next(err);
@@ -73,23 +40,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     if (!username || !password) {
       throw new ClientError(401, 'invalid login');
     }
-    const sql = `
-    select "userId",
-           "hashedPassword"
-      from "users"
-     where "username" = $1;
-  `;
-    const params = [username];
-    const result = await db.query<User>(sql, params);
-    const [user] = result.rows;
-    if (!user) {
-      throw new ClientError(401, 'invalid login');
-    }
-    const { userId, hashedPassword } = user;
-    if (!(await argon2.verify(hashedPassword, password))) {
-      throw new ClientError(401, 'invalid login');
-    }
-    const payload = { userId, username };
+    const payload = (await userSignIn(username, password)) as PayloadForToken;
     const token = jwt.sign(payload, hashKey);
     res.json({ token, user: payload });
   } catch (err) {
@@ -97,75 +48,14 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
   }
 });
 
-async function getAccountByAccountId(accountId: number): Promise<Account> {
-  const sql = `
-      select *
-        from "accounts"
-      where "accountId" = $1;
-    `;
-  const result = await db.query<Account>(sql, [accountId]);
-  const account = result.rows[0];
-  return account;
-}
-
-function getNameTagValue(tags: Tag[]): Tag['Value'] {
-  if (!tags) {
-    return '';
-  }
-  for (const tag of tags) {
-    if (tag.Key === 'Name') {
-      return tag.Value;
-    }
-  }
-  return '';
-}
-
-// function getTags(tags: Tag[]): string {
-//   if (tags === null) {
-//     return '';
-//   }
-//   const tagDict: Record<string, string> = {};
-//   for (const tag of tags) {
-//     tagDict[tag.Key] = tag.Value;
-//   }
-//   return JSON.stringify(tagDict);
-// }
-
-app.get('/api/aws/virtual-machines', async (req, res, next) => {
+app.get('/api/virtual-machines', authMiddleware, async (req, res, next) => {
   try {
-    const account = await getAccountByAccountId(1);
-    const client = new EC2Client({
-      region: 'us-east-2',
-      credentials: {
-        accessKeyId: decryptText(account.accessKey),
-        secretAccessKey: decryptText(account.secretKey),
-      },
-    });
-    const instanceList = [];
-    const command = new DescribeInstancesCommand();
-    const response = await client.send(command);
-    const { Reservations } = response;
-    if (Reservations) {
-      for (const reservation of Reservations) {
-        instanceList.push(...(reservation.Instances ?? []));
-      }
+    if (!req.user) {
+      throw new ClientError(401, 'user not logged in');
     }
-    const instancesInfo = [];
-    for (const instance of instanceList) {
-      instancesInfo.push({
-        name: getNameTagValue(instance.Tags ?? []),
-        instanceId: instance.InstanceId,
-        region: instance.Placement?.AvailabilityZone,
-        vpcId: instance.VpcId,
-        subnetId: instance.SubnetId,
-        state: instance.State?.Name,
-        type: instance.InstanceType,
-        os: instance.PlatformDetails,
-        privateIp: instance.PrivateIpAddress,
-        publicIp: instance.PublicIpAddress,
-      });
-    }
-    res.json(instancesInfo);
+    const account = (await getAccountByAccountId(1)) as Account;
+    const virtualMachines = await getAllVMs(account);
+    res.json(virtualMachines);
   } catch (err) {
     next(err);
   }
