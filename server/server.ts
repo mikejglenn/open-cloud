@@ -5,7 +5,6 @@ import { ClientError, errorMiddleware, authMiddleware } from './lib';
 import { User, Auth, userSignIn, userSignUp, PayloadForToken } from './user';
 import { Account, getAccountsByUserId } from './account';
 import { getAllVMs } from './virtual-machines';
-// import { getAllGcpVmInstances } from './gcp';
 
 export const hashKey = process.env.TOKEN_SECRET;
 if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
@@ -56,7 +55,6 @@ app.get('/api/virtual-machines', authMiddleware, async (req, res, next) => {
     }
     const accounts = (await getAccountsByUserId(req.user.userId)) as Account[];
     const virtualMachines = await getAllVMs(accounts);
-    // await getAllGcpVmInstances();
     res.json(virtualMachines);
   } catch (err) {
     next(err);

@@ -1,6 +1,7 @@
 import { db } from './db';
 import { Account } from './account';
 import { getAllAwsVmInstances } from './aws';
+// import { getAllGcpVmInstances } from './gcp';
 
 export type VirtualMachine = {
   virtualMachineId?: number;
@@ -69,6 +70,7 @@ export async function getAllVMs(
       case 'AWS':
         virtualMachines.push(...(await getAllAwsVmInstances(account)));
         await dbWriteVMs(account.accountId, virtualMachines);
+        // await getAllGcpVmInstances(); //
         break;
       // case 'GCP':
       //   virtualMachines.push(...(await getAllGcpVmInstances(account)));
