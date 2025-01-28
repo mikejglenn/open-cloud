@@ -42,7 +42,7 @@ CREATE TABLE "virtualMachines" (
   "virtualMachineId" serial PRIMARY KEY,
   "accountId" integer,
   "name" text,
-  "instanceId" text,
+  "instanceId" text UNIQUE,
   "region" text,
   "vpcId" text,
   "subnetId" text,
