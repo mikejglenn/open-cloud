@@ -17,7 +17,7 @@ export function getTags(tags: Tag[]): string {
   return JSON.stringify(tagDict);
 }
 
-export async function getAllEC2Instances(
+export async function getAllAwsVmInstances(
   account: Account
 ): Promise<VirtualMachine[]> {
   const client = new EC2Client({
