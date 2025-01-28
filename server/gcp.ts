@@ -3,13 +3,16 @@ import compute from '@google-cloud/compute';
 // import { decryptText } from './crypto-text';
 // import { VirtualMachine } from './virtual-machines';
 
-process.env.GOOGLE_APPLICATION_CREDENTIALS = `YOUR_PROJECT_ID.json`;
-
-const projectId = 'YOUR_PROJECT_ID';
+const projectId = 'project_id';
 
 // List all instances in the specified project.
 export async function getAllGcpVmInstances(): Promise<void> {
-  const instancesClient = new compute.InstancesClient();
+  const instancesClient = new compute.InstancesClient({
+    credentials: {
+      client_email: 'projidiamgcpservacc.com',
+      private_key: 'endprivatekeybegin',
+    },
+  });
 
   // Use the `maxResults` parameter to limit the number of results that the API returns per response page.
   const aggListRequest = instancesClient.aggregatedListAsync({
