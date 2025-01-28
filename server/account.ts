@@ -10,15 +10,12 @@ export type Account = {
   secretKey: string;
 };
 
-export async function getAccountByAccountId(
-  accountId: number
-): Promise<Account> {
+export async function getAccountsByUserId(userId: number): Promise<Account[]> {
   const sql = `
-      select *
-        from "accounts"
-      where "accountId" = $1;
+      select * from "accounts"
+      where "userId" = $1;
     `;
-  const result = await db.query<Account>(sql, [accountId]);
-  const account = result.rows[0];
-  return account;
+  const result = await db.query<Account>(sql, [userId]);
+  const accounts = result.rows;
+  return accounts;
 }

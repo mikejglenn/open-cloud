@@ -3,8 +3,9 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { ClientError, errorMiddleware, authMiddleware } from './lib';
 import { User, Auth, userSignIn, userSignUp, PayloadForToken } from './user';
-import { Account, getAccountByAccountId } from './account';
+import { Account, getAccountsByUserId } from './account';
 import { getAllVMs } from './virtual-machines';
+// import { getAllGcpVmInstances } from './gcp';
 
 export const hashKey = process.env.TOKEN_SECRET;
 if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
@@ -53,8 +54,9 @@ app.get('/api/virtual-machines', authMiddleware, async (req, res, next) => {
     if (!req.user) {
       throw new ClientError(401, 'user not logged in');
     }
-    const account = (await getAccountByAccountId(1)) as Account;
-    const virtualMachines = await getAllVMs(account);
+    const accounts = (await getAccountsByUserId(req.user.userId)) as Account[];
+    const virtualMachines = await getAllVMs(accounts);
+    // await getAllGcpVmInstances();
     res.json(virtualMachines);
   } catch (err) {
     next(err);

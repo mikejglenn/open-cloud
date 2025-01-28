@@ -1,6 +1,6 @@
 import { db } from './db';
 import { Account } from './account';
-import { getAllEC2Instances } from './aws';
+import { getAllAwsVmInstances } from './aws';
 
 export type VirtualMachine = {
   virtualMachineId?: number;
@@ -85,8 +85,21 @@ async function dbWriteVMs(
   }
 }
 
-export async function getAllVMs(account: Account): Promise<VirtualMachine[]> {
-  const virtualMachines = await getAllEC2Instances(account);
-  await dbWriteVMs(account.accountId, virtualMachines);
+export async function getAllVMs(
+  accounts: Account[]
+): Promise<VirtualMachine[]> {
+  const virtualMachines = [];
+  for (const account of accounts) {
+    switch (account.provider) {
+      case 'AWS':
+        virtualMachines.push(...(await getAllAwsVmInstances(account)));
+        await dbWriteVMs(account.accountId, virtualMachines);
+        break;
+      // case 'GCP':
+      //   virtualMachines.push(...(await getAllGcpVmInstances(account)));
+      //   await dbWriteVMs(account.accountId, virtualMachines);
+      //   break;
+    }
+  }
   return virtualMachines;
 }
