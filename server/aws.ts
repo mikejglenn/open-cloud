@@ -3,13 +3,13 @@ import { Account } from './account';
 import { decryptText } from './crypto-text';
 import { VirtualMachine } from './virtual-machines';
 
-export function getNameTagValue(tags: Tag[]): Tag['Value'] {
+function getNameTagValue(tags: Tag[]): Tag['Value'] {
   if (!tags) return '';
   for (const tag of tags) if (tag.Key === 'Name') return tag.Value;
   return '';
 }
 
-export function getTags(tags: Tag[]): string {
+function getTags(tags: Tag[]): string {
   if (!tags) return '';
   const tagDict: Record<string, string> = {};
   for (const tag of tags)
@@ -40,17 +40,17 @@ export async function getAllAwsVmInstances(
   for (const instance of instanceList) {
     if (instancesInfo) {
       instancesInfo.push({
-        name: getNameTagValue(instance.Tags ?? []),
-        instanceId: instance.InstanceId,
-        region: instance.Placement?.AvailabilityZone,
-        vpcId: instance.VpcId,
-        subnetId: instance.SubnetId,
-        state: instance.State?.Name,
-        type: instance.InstanceType,
-        os: instance.PlatformDetails,
-        privateIp: instance.PrivateIpAddress,
-        publicIp: instance.PublicIpAddress,
-        tags: getTags(instance.Tags ?? []),
+        name: getNameTagValue(instance.Tags ?? []) ?? '',
+        instanceId: instance.InstanceId ?? '',
+        region: instance.Placement?.AvailabilityZone ?? '',
+        vpcId: instance.VpcId ?? '',
+        subnetId: instance.SubnetId ?? '',
+        state: instance.State?.Name ?? '',
+        type: instance.InstanceType ?? '',
+        os: instance.PlatformDetails ?? '',
+        privateIp: instance.PrivateIpAddress ?? '',
+        publicIp: instance.PublicIpAddress ?? '',
+        tags: getTags(instance.Tags ?? []) ?? '',
         launchTime: instance.LaunchTime,
       });
     }
