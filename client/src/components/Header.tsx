@@ -1,5 +1,6 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from './useUser';
+// import { FaBars, FaEllipsis } from 'react-icons/fa6';
 
 export function Header() {
   const { user, handleSignOut } = useUser();
@@ -7,8 +8,7 @@ export function Header() {
 
   return (
     <>
-      <h1>Open Cloud</h1>
-      <nav>
+      <header>
         {!user && (
           <>
             <Link to="/sign-up">Sign Up</Link>
@@ -28,8 +28,11 @@ export function Header() {
             </button>
           </>
         )}
-      </nav>
-      <Outlet />
+      </header>
+      <main>
+        <Outlet />
+      </main>
+      <footer></footer>
     </>
   );
 }

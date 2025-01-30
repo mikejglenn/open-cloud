@@ -3,7 +3,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { ClientError, errorMiddleware, authMiddleware } from './lib';
 import { User, Auth, userSignIn, userSignUp, PayloadForToken } from './user';
-import { Account, getAccountsByUserId } from './account';
+import { Account, createAccount, getAccountsByUserId } from './account';
 import { getAllVMs } from './virtual-machines';
 
 export const hashKey = process.env.TOKEN_SECRET;
@@ -43,6 +43,56 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     const payload = (await userSignIn(username, password)) as PayloadForToken;
     const token = jwt.sign(payload, hashKey);
     res.json({ token, user: payload });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/accounts', authMiddleware, async (req, res, next) => {
+  try {
+    if (!req.user) {
+      throw new ClientError(401, 'user not logged in');
+    }
+    const accounts = (await getAccountsByUserId(req.user.userId)) as Account[];
+    res.json(accounts);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// app.get('/api/entries/:entryId', authMiddleware, async (req, res, next) => {
+//   try {
+//     const { entryId } = req.params;
+//     if (!Number.isInteger(+entryId)) {
+//       throw new ClientError(400, 'entryId needs to be a number');
+//     }
+//     const sql = `
+//       select *
+//       from "entries"
+//       where "entryId" = $1 and "userId" = $2;
+//     `;
+//     const params = [entryId, req.user?.userId];
+//     const result = await db.query(sql, params);
+//     const entry = result.rows[0];
+//     if (!entry) {
+//       return res.status(404).json({ error: 'entry not found' });
+//     }
+//     res.status(200).json(entry);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+app.post('/api/accounts', authMiddleware, async (req, res, next) => {
+  try {
+    if (!req.user) {
+      throw new ClientError(401, 'user not logged in');
+    }
+    const createdAccount = (await createAccount(
+      req.user.userId,
+      req.body
+    )) as Account;
+    res.status(201).json(createdAccount);
   } catch (err) {
     next(err);
   }

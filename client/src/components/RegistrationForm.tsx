@@ -34,33 +34,15 @@ export function RegistrationForm() {
   }
 
   return (
-    <div className="hero">
-      <div className="hero-content">
-        <h1>Register now!</h1>
-        <div className="card">
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <label title="Username" />
-              <input
-                required
-                name="username"
-                type="text"
-                className="input-bordered"
-              />
-              <label title="Password" />
-              <input
-                required
-                name="password"
-                type="password"
-                className="input-bordered"
-              />
-              <button disabled={isLoading} className="btn-primary block">
-                Register
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <h1>Register now!</h1>
+      <form onSubmit={handleSubmit}>
+        <label title="Username" />
+        <input required name="username" type="text" />
+        <label title="Password" />
+        <input required name="password" type="password" />
+        <button disabled={isLoading}>Register</button>
+      </form>
+    </>
   );
 }
