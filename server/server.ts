@@ -133,7 +133,10 @@ app.delete(
         throw new ClientError(400, 'accountId needs to be a number');
       }
 
-      const deletedAccount = await deleteAccount(req.user.userId, +accountId);
+      const deletedAccount = (await deleteAccount(
+        req.user.userId,
+        +accountId
+      )) as Account;
       if (!deletedAccount) {
         throw new ClientError(404, 'Account not found');
       }

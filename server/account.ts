@@ -62,7 +62,7 @@ export async function createAccount(
     encryptText(accessKey),
     encryptText(secretKey),
   ];
-  const result = await db.query(sql, params);
+  const result = await db.query<Account>(sql, params);
   const createdAccount = result.rows[0];
   return createdAccount;
 }
@@ -95,7 +95,7 @@ export async function updateAccount(
     encryptText(accessKey),
     encryptText(secretKey),
   ];
-  const result = await db.query(sql, params);
+  const result = await db.query<Account>(sql, params);
   const createdAccount = result.rows[0];
   return createdAccount;
 }
@@ -110,7 +110,7 @@ export async function deleteAccount(
     returning *;
   `;
   const params = [userId, accountId];
-  const result = await db.query(sql, params);
+  const result = await db.query<Account>(sql, params);
   const deletedAccount = result.rows[0];
   return deletedAccount;
 }
