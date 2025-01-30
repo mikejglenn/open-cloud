@@ -11,6 +11,7 @@ import {
 export function AccountForm() {
   const { accountId } = useParams();
   const [account, setAccount] = useState<Account>();
+  const [provider, setProvider] = useState<Account['provider']>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,6 +25,7 @@ export function AccountForm() {
         const account = await readAccount(id);
         if (!account) throw new Error(`Account with ID ${id} not found`);
         setAccount(account);
+        setProvider(account.provider);
       } catch (err) {
         setError(err);
       } finally {
@@ -65,7 +67,9 @@ export function AccountForm() {
     <>
       <h1>{isEditing ? 'Edit Account' : 'New Account'}</h1>
       <form onSubmit={handleSubmit}>
-        <label>Account Name / Project Name</label>
+        <label>
+          {!provider || provider === 'AWS' ? 'Account Name' : 'Project Name'}
+        </label>
         <input
           name="name"
           defaultValue={account?.name ?? ''}
@@ -74,35 +78,57 @@ export function AccountForm() {
         />
         <fieldset>
           <legend>Provider</legend>
-          <input type="radio" name="provider" value="AWS" id="aws" required />
+          <input
+            checked={provider === 'AWS' ? true : false}
+            type="radio"
+            name="provider"
+            value="AWS"
+            id="aws"
+            required
+            onClick={() => setProvider('AWS')}
+          />
           <label htmlFor="aws">AWS</label>
-          <input type="radio" name="provider" value="GCP" id="gcp" required />
+          <input
+            checked={provider === 'GCP' ? true : false}
+            type="radio"
+            name="provider"
+            value="GCP"
+            id="gcp"
+            required
+            onClick={() => setProvider('GCP')}
+          />
           <label htmlFor="gcp">GCP</label>
         </fieldset>
-        <label>Account ID / Project ID</label>
+        <label>
+          {!provider || provider === 'AWS' ? 'Account ID' : 'Project ID'}
+        </label>
         <input
           name="account"
           defaultValue={account?.account ?? ''}
           required
           type="text"
         />
-        <label>Access Key / Client Email</label>
+        <label>
+          {!provider || provider === 'AWS' ? 'Access Key' : 'Client Email'}
+        </label>
         <textarea
           name="accessKey"
           defaultValue={account?.accessKey ?? ''}
           required
         />
-        <label>Secret Key / Private Key</label>
+        <label>
+          {!provider || provider === 'AWS' ? 'Secret Key' : 'Private Key'}
+        </label>
         <textarea
           name="secretKey"
-          defaultValue={account?.accessKey ?? ''}
+          defaultValue={account?.secretKey ?? ''}
           required
         />
-        {isEditing && (
+        {/* {isEditing && (
           <button type="button" onClick={() => setIsDeleting(true)}>
             Delete Account
           </button>
-        )}
+        )} */}
         <button>SAVE</button>
       </form>
       {isDeleting && (

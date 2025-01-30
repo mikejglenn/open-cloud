@@ -44,7 +44,7 @@ export async function getAllAwsVmInstances(
           VMsInfo.push({
             name: getNameTagValue(instance.Tags ?? []) ?? '',
             instanceId: instance.InstanceId ?? '',
-            region: instance.Placement?.AvailabilityZone ?? '',
+            region,
             vpcId: instance.VpcId ?? '',
             subnetId: instance.SubnetId ?? '',
             state: instance.State?.Name ?? '',
