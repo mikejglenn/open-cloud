@@ -4,21 +4,18 @@ import { getAllAwsVmInstances } from './aws';
 // import { getAllGcpVmInstances } from './gcp';
 
 export type VirtualMachine = {
-  virtualMachineId?: number;
-  accountId?: number;
-  name?: string;
-  instanceId?: string;
-  region?: string;
-  vpcId?: string;
-  subnetId?: string;
-  state?: string;
-  type?: string;
-  os?: string;
-  privateIp?: string;
-  publicIp?: string;
-  tags?: string;
-  launchTime?: Date;
-  lastSeen?: Date;
+  name: string;
+  instanceId: string;
+  region: string;
+  vpcId: string;
+  subnetId: string;
+  state: string;
+  type: string;
+  os: string;
+  privateIp: string;
+  publicIp: string;
+  tags: string;
+  launchTime: Date | undefined;
 };
 
 async function dbWriteVMs(
