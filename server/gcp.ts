@@ -1,38 +1,51 @@
 import compute from '@google-cloud/compute';
-// import { Account } from './account';
-// import { decryptText } from './crypto-text';
-// import { VirtualMachine } from './virtual-machines';
+import { Account } from './account';
+import { decryptText } from './crypto-text';
+import { VirtualMachine } from './virtual-machines';
 
-const projectId = 'project_id';
+export async function getAllGcpVmInstances(
+  account: Account
+): Promise<VirtualMachine[]> {
+  const VMsInfo: VirtualMachine[] = [];
 
-// List all instances in the specified project.
-export async function getAllGcpVmInstances(): Promise<void> {
   const instancesClient = new compute.InstancesClient({
     credentials: {
-      client_email: 'projidiamgcpservacc.com',
-      private_key: 'endprivatekeybegin',
+      client_email: decryptText(account.accessKey),
+      private_key: decryptText(account.secretKey),
     },
   });
 
-  // Use the `maxResults` parameter to limit the number of results that the API returns per response page.
   const aggListRequest = instancesClient.aggregatedListAsync({
-    project: projectId,
-    maxResults: 5,
+    project: account.account, // projectId
   });
 
-  console.log('Instances found:');
-
-  // Despite using the `maxResults` parameter, you don't need to handle the pagination
-  // yourself. The returned object handles pagination automatically,
-  // requesting next pages as you iterate over the results.
   for await (const [zone, instancesObject] of aggListRequest) {
     const instances = instancesObject.instances;
 
     if (instances && instances.length > 0) {
-      console.log(` ${zone}`);
       for (const instance of instances) {
-        console.log(` - ${instance.name} (${instance.machineType})`);
+        VMsInfo.push({
+          name: instance.name ?? '',
+          instanceId: instance.id ? `${instance.id}` : '',
+          region: zone.split('/').pop()?.slice(0, -2) ?? '',
+          vpcId:
+            instance.networkInterfaces?.[0].network?.split('/').pop() ?? '',
+          subnetId:
+            instance.networkInterfaces?.[0].subnetwork?.split('/').pop() ?? '',
+          state: instance.status ?? '',
+          type: instance.machineType?.split('/').pop() ?? '',
+          os: '',
+          privateIp: instance.networkInterfaces?.[0].networkIP ?? '',
+          publicIp:
+            instance.networkInterfaces?.[0].accessConfigs?.[0].natIP ?? '',
+          tags: instance.tags?.items?.join(',') ?? '',
+          launchTime: instance.creationTimestamp
+            ? new Date(instance.creationTimestamp)
+            : undefined,
+        });
       }
     }
   }
+
+  return VMsInfo;
 }
