@@ -1,3 +1,5 @@
+import { VirtualMachines } from '../components/VirtualMachines';
+
 export function Inventory() {
-  return <></>;
+  return <VirtualMachines />;
 }

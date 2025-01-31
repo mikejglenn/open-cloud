@@ -18,6 +18,21 @@ type Auth = {
   token: string;
 };
 
+export type VirtualMachine = {
+  name: string;
+  instanceId: string;
+  region: string;
+  vpcId: string;
+  subnetId: string;
+  state: string;
+  type: string;
+  os: string;
+  privateIp: string;
+  publicIp: string;
+  tags: string;
+  launchTime: Date | undefined;
+};
+
 export function saveAuth(user: User, token: string): void {
   const auth: Auth = { user, token };
   localStorage.setItem(authKey, JSON.stringify(auth));
@@ -111,4 +126,18 @@ export async function removeAccount(accountId: number): Promise<void> {
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
+}
+
+export async function readVirtualMachines(): Promise<VirtualMachine[]> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const response = await fetch('/api/virtual-machines', req);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  const data = (await response.json()) as VirtualMachine[];
+  return data;
 }
