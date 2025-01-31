@@ -33,7 +33,7 @@ export function AccountForm() {
       }
     }
     if (isEditing) load(+accountId);
-  }, [accountId]);
+  }, [accountId, isEditing]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
