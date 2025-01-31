@@ -18,6 +18,19 @@ export type VirtualMachine = {
   launchTime: Date | undefined;
 };
 
+async function dbSelectAccountVMs(
+  accountId: number
+): Promise<VirtualMachine[]> {
+  const sql = `
+    select "name", "instanceId", "region", "vpcId", "subnetId", "state", "type",
+           "os", "privateIp", "publicIp", "tags", "launchTime"
+      from "virtualMachines"
+     where "accountId" = $1;
+  `;
+  const result = await db.query<VirtualMachine>(sql, [accountId]);
+  return result.rows;
+}
+
 async function dbWriteVMs(
   accountId: number,
   virtualMachines: VirtualMachine[]
@@ -59,19 +72,28 @@ async function dbWriteVMs(
 }
 
 export async function getAllVMs(
-  accounts: Account[]
+  accounts: Account[],
+  refresh: string | undefined
 ): Promise<VirtualMachine[]> {
   const virtualMachines = [];
-  for (const account of accounts) {
-    switch (account.provider) {
-      case 'AWS':
-        virtualMachines.push(...(await getAllAwsVmInstances(account)));
-        break;
-      case 'GCP':
-        virtualMachines.push(...(await getAllGcpVmInstances(account)));
-        break;
+
+  if (refresh === 'yes') {
+    for (const account of accounts) {
+      switch (account.provider) {
+        case 'AWS':
+          virtualMachines.push(...(await getAllAwsVmInstances(account)));
+          break;
+        case 'GCP':
+          virtualMachines.push(...(await getAllGcpVmInstances(account)));
+          break;
+      }
+      await dbWriteVMs(account.accountId, virtualMachines);
     }
-    await dbWriteVMs(account.accountId, virtualMachines);
+  } else {
+    for (const account of accounts) {
+      virtualMachines.push(...(await dbSelectAccountVMs(account.accountId)));
+    }
   }
+
   return virtualMachines;
 }

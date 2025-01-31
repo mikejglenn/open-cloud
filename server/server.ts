@@ -151,7 +151,8 @@ app.get('/api/virtual-machines', authMiddleware, async (req, res, next) => {
   try {
     if (!req.user) throw new ClientError(403, 'user not logged in');
     const accounts = (await getAccountsByUserId(req.user.userId)) as Account[];
-    const virtualMachines = await getAllVMs(accounts);
+    const { refresh } = req.query;
+    const virtualMachines = await getAllVMs(accounts, `${refresh}`);
     res.json(virtualMachines);
   } catch (err) {
     next(err);
