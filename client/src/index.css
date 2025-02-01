@@ -1,0 +1,7 @@
+/* stylelint-disable */
+/* prettier-ignore */
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: business --default;
+}
+/* stylelint-enable */
