@@ -61,12 +61,14 @@ type AccountProps = {
 };
 function AccountCard({ account }: AccountProps) {
   return (
-    <li>
-      <h3>{account.name}</h3>
-      <Link to={`accounts/${account.accountId}`}>
-        <FaPencilAlt />
-      </Link>
-      <p>{account.account}</p>
+    <li className="card bg-base-100 w-96 shadow-sm">
+      <div className="card-body">
+        <h2 className="card-title">Account Name: {account.name}</h2>
+        <Link to={`accounts/${account.accountId}`}>
+          <FaPencilAlt />
+        </Link>
+        <p>Account ID: {account.account}</p>
+      </div>
     </li>
   );
 }

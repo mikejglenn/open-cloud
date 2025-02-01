@@ -66,19 +66,27 @@ export function AccountForm() {
   return (
     <>
       <h1>{isEditing ? 'Edit Account' : 'New Account'}</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+
+      <form onSubmit={handleSubmit} className="form">
+        <label className="label">
           {!provider || provider === 'AWS' ? 'Account Name' : 'Project Name'}
         </label>
         <input
+          className="input"
           name="name"
           defaultValue={account?.name ?? ''}
           required
           type="text"
         />
-        <fieldset>
-          <legend>Provider</legend>
+
+        <fieldset className="fieldset flex">
+          <legend className="fieldset-legend">Provider</legend>
+
+          <label htmlFor="aws" className="label inline">
+            AWS
+          </label>
           <input
+            className="radio inline"
             checked={provider === 'AWS' ? true : false}
             type="radio"
             name="provider"
@@ -87,8 +95,12 @@ export function AccountForm() {
             required
             onClick={() => setProvider('AWS')}
           />
-          <label htmlFor="aws">AWS</label>
+
+          <label htmlFor="gcp" className="label inline">
+            GCP
+          </label>
           <input
+            className="radio inline"
             checked={provider === 'GCP' ? true : false}
             type="radio"
             name="provider"
@@ -97,29 +109,34 @@ export function AccountForm() {
             required
             onClick={() => setProvider('GCP')}
           />
-          <label htmlFor="gcp">GCP</label>
         </fieldset>
-        <label>
+
+        <label className="label">
           {!provider || provider === 'AWS' ? 'Account ID' : 'Project ID'}
         </label>
         <input
+          className="input block"
           name="account"
           defaultValue={account?.account ?? ''}
           required
           type="text"
         />
-        <label>
+
+        <label className="label">
           {!provider || provider === 'AWS' ? 'Access Key' : 'Client Email'}
         </label>
         <textarea
+          className="textarea block"
           name="accessKey"
           defaultValue={account?.accessKey ?? ''}
           required
         />
-        <label>
+
+        <label className="label">
           {!provider || provider === 'AWS' ? 'Secret Key' : 'Private Key'}
         </label>
         <textarea
+          className="textarea block"
           name="secretKey"
           defaultValue={account?.secretKey ?? ''}
           required
@@ -129,7 +146,7 @@ export function AccountForm() {
             Delete Account
           </button>
         )} */}
-        <button>SAVE</button>
+        <button className="btn">SAVE</button>
       </form>
       {isDeleting && (
         <>
