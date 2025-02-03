@@ -1,10 +1,34 @@
+import { Link } from 'react-router-dom';
 import { useUser } from '../components/useUser';
-import { VirtualMachines } from '../components/VirtualMachines';
 
 export function Inventory() {
   const { user } = useUser();
 
   if (!user) return null;
 
-  return <VirtualMachines />;
+  return (
+    <>
+      <Link
+        to="inventory/virtual-machines"
+        className="card bg-neutral text-neutral-content w-96 mb-2">
+        <div className="card-body items-center text-center">
+          <h2 className="card-title">Virtual Machines</h2>
+        </div>
+      </Link>
+      <Link
+        to="inventory/object-storage"
+        className="card bg-neutral text-neutral-content w-96 mb-2">
+        <div className="card-body items-center text-center">
+          <h2 className="card-title">Object Storage</h2>
+        </div>
+      </Link>
+      <Link
+        to="inventory/vpc-networks"
+        className="card bg-neutral text-neutral-content w-96 mb-2">
+        <div className="card-body items-center text-center">
+          <h2 className="card-title">VPC Networks</h2>
+        </div>
+      </Link>
+    </>
+  );
 }

@@ -3,9 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import { NotFound } from './pages/NotFound';
 import { AuthPage } from './pages/AuthPage';
 import { Header } from './components/Header';
-import { Inventory } from './pages/Inventory';
 import { AccountForm } from './pages/AccountForm';
 import { Home } from './pages/Home';
+import { Inventory } from './pages/Inventory';
+import { VirtualMachines } from './pages/VirtualMachines';
+import { ObjectStorage } from './pages/ObjectStorage';
 
 export default function App() {
   return (
@@ -15,6 +17,12 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="accounts/:accountId" element={<AccountForm />} />
           <Route path="inventory" element={<Inventory />} />
+          <Route
+            path="inventory/virtual-machines"
+            element={<VirtualMachines />}
+          />
+          <Route path="inventory/object-storage" element={<ObjectStorage />} />
+          <Route path="inventory/vpc-networks" element={<Inventory />} />
           <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
           <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
           <Route path="*" element={<NotFound />} />
