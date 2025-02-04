@@ -4,8 +4,8 @@ export type UnsavedAccount = {
   name: string;
   provider: string;
   account: string;
-  accessKey: string;
-  secretKey: string;
+  credentialIdentity: string;
+  credentialSecret: string;
 };
 export type Account = UnsavedAccount & {
   accountId?: number;
@@ -24,14 +24,20 @@ export type VirtualMachine = {
   region: string;
   vpcId: string;
   subnetId: string;
-  state: string;
-  type: string;
-  os: string;
+  instanceState: string;
+  instanceType: string;
+  instanceOs: string;
   privateIp: string;
   publicIp: string;
   tags: string;
   launchTime: Date | undefined;
 };
+
+// needed if private key is pasted with literal '\n'
+function gcpPrivateKeyNewlineReplace(account: Account): void {
+  if (account.provider === 'GCP')
+    account.credentialSecret = account.credentialSecret.replace(/\\n/g, '\n');
+}
 
 export function saveAuth(user: User, token: string): void {
   const auth: Auth = { user, token };
@@ -85,6 +91,8 @@ export async function readAccount(
 }
 
 export async function insertAccount(account: Account): Promise<Account> {
+  // needed if private key is pasted with literal '\n'
+  gcpPrivateKeyNewlineReplace(account);
   const response = await fetch('/api/accounts/', {
     method: 'post',
     headers: {
@@ -101,6 +109,8 @@ export async function insertAccount(account: Account): Promise<Account> {
 }
 
 export async function updateAccount(account: Account): Promise<Account> {
+  // needed if private key is pasted with literal '\n'
+  gcpPrivateKeyNewlineReplace(account);
   const response = await fetch(`/api/accounts/${account.accountId}`, {
     method: 'put',
     headers: {

@@ -41,9 +41,11 @@ export function AccountList() {
 
   return (
     <>
-      <h1>Accounts</h1>
+      <h2 className="text-2xl">Accounts</h2>
       <h3>
-        <Link to="/accounts/new">NEW</Link>
+        <Link to="/accounts/new" className="btn">
+          NEW
+        </Link>
       </h3>
 
       <ul>

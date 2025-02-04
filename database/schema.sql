@@ -8,8 +8,8 @@ create schema "public";
 
 CREATE TABLE "users" (
   "userId" serial PRIMARY KEY,
-  "username" text,
-  "hashedPassword" text,
+  "username" text NOT NULL,
+  "hashedPassword" text NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now())
 );
@@ -17,23 +17,11 @@ CREATE TABLE "users" (
 CREATE TABLE "accounts" (
   "accountId" serial PRIMARY KEY,
   "userId" integer,
-  "name" text,
-  "provider" text,
-  "account" text,
-  "accessKey" text,
-  "secretKey" text,
-  "createdAt" timestamptz NOT NULL DEFAULT (now()),
-  "updatedAt" timestamptz NOT NULL DEFAULT (now())
-);
-
-CREATE TABLE "vpcNetworks" (
-  "vpcNetworkId" serial PRIMARY KEY,
-  "accountId" integer,
-  "name" text,
-  "vpcId" text,
-  "region" text,
-  "ip4cidr" text,
-  "lastSeen" timestamptz,
+  "name" text NOT NULL,
+  "provider" text NOT NULL,
+  "account" text NOT NULL,
+  "credentialIdentity" text NOT NULL,
+  "credentialSecret" text NOT NULL,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now())
 );
@@ -41,15 +29,15 @@ CREATE TABLE "vpcNetworks" (
 CREATE TABLE "virtualMachines" (
   "virtualMachineId" serial PRIMARY KEY,
   "accountId" integer,
-  "name" text,
-  "instanceId" text UNIQUE,
-  "region" text,
-  "vpcId" text,
-  "subnetId" text,
-  "state" text,
-  "type" text,
-  "os" text,
-  "privateIp" text,
+  "name" text NOT NULL,
+  "instanceId" text UNIQUE NOT NULL,
+  "region" text NOT NULL,
+  "vpcId" text NOT NULL,
+  "subnetId" text NOT NULL,
+  "instanceState" text NOT NULL,
+  "instanceType" text NOT NULL,
+  "instanceOs" text,
+  "privateIp" text NOT NULL,
   "publicIp" text,
   "tags" text,
   "launchTime" timestamptz,
@@ -61,9 +49,21 @@ CREATE TABLE "virtualMachines" (
 CREATE TABLE "buckets" (
   "bucketId" serial PRIMARY KEY,
   "accountId" integer,
+  "name" text NOT NULL,
+  "region" text NOT NULL,
+  "creationDate" timestamptz NOT NULL,
+  "lastSeen" timestamptz,
+  "createdAt" timestamptz NOT NULL DEFAULT (now()),
+  "updatedAt" timestamptz NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "vpcNetworks" (
+  "vpcNetworkId" serial PRIMARY KEY,
+  "accountId" integer,
   "name" text,
-  "region" text,
-  "creationDate" timestamptz,
+  "vpcId" text NOT NULL,
+  "region" text NOT NULL,
+  "ip4cidr" text NOT NULL,
   "lastSeen" timestamptz,
   "createdAt" timestamptz NOT NULL DEFAULT (now()),
   "updatedAt" timestamptz NOT NULL DEFAULT (now())
@@ -71,8 +71,8 @@ CREATE TABLE "buckets" (
 
 ALTER TABLE "accounts" ADD FOREIGN KEY ("userId") REFERENCES "users" ("userId");
 
-ALTER TABLE "vpcNetworks" ADD FOREIGN KEY ("accountId") REFERENCES "accounts" ("accountId");
-
 ALTER TABLE "virtualMachines" ADD FOREIGN KEY ("accountId") REFERENCES "accounts" ("accountId");
 
 ALTER TABLE "buckets" ADD FOREIGN KEY ("accountId") REFERENCES "accounts" ("accountId");
+
+ALTER TABLE "vpcNetworks" ADD FOREIGN KEY ("accountId") REFERENCES "accounts" ("accountId");

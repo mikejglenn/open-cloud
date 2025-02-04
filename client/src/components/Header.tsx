@@ -14,6 +14,9 @@ export function Header() {
             <span className="uppercase text-accent">Open</span>
             <span className="uppercase">Cloud</span>
           </NavLink>
+          <NavLink to="/" className="btn btn-ghost text-xl">
+            Accounts
+          </NavLink>
           <NavLink to="/inventory" className="btn btn-ghost text-xl">
             Inventory
           </NavLink>
@@ -38,7 +41,7 @@ export function Header() {
         <aside className="w-64 p-4 hidden sm:block">
           <ul className="menu bg-base-200 w-56">
             <li>
-              <Link to="/inventory">Virtual Machines</Link>
+              <Link to="/inventory/virtual-machines">Virtual Machines</Link>
             </li>
             <li>
               <Link to="/inventory/object-storage">Object Storage</Link>
@@ -50,7 +53,7 @@ export function Header() {
         </aside>
 
         <main className="flex-grow w-64 p-4">
-          {!user && <p>Not signed in</p>}
+          {!user && <p>Not signed in!</p>}
           <Outlet />
         </main>
       </div>

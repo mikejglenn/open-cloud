@@ -3,6 +3,10 @@ import { Account } from './account';
 import { decryptText } from './crypto-text';
 import { VirtualMachine } from './virtual-machines';
 
+function afterEndSlash(str: string | undefined): string | undefined {
+  return str?.split('/').pop();
+}
+
 export async function getAllGcpVmInstances(
   account: Account
 ): Promise<VirtualMachine[]> {
@@ -10,8 +14,8 @@ export async function getAllGcpVmInstances(
 
   const instancesClient = new compute.InstancesClient({
     credentials: {
-      client_email: decryptText(account.accessKey),
-      private_key: decryptText(account.secretKey),
+      client_email: decryptText(account.credentialIdentity),
+      private_key: decryptText(account.credentialSecret),
     },
   });
 
@@ -27,14 +31,15 @@ export async function getAllGcpVmInstances(
         VMsInfo.push({
           name: instance.name ?? '',
           instanceId: instance.id ? `${instance.id}` : '',
-          region: zone.split('/').pop()?.slice(0, -2) ?? '',
+          region: afterEndSlash(zone)?.slice(0, -2) ?? '',
           vpcId:
-            instance.networkInterfaces?.[0].network?.split('/').pop() ?? '',
+            afterEndSlash(instance.networkInterfaces?.[0].network ?? '') ?? '',
           subnetId:
-            instance.networkInterfaces?.[0].subnetwork?.split('/').pop() ?? '',
-          state: instance.status ?? '',
-          type: instance.machineType?.split('/').pop() ?? '',
-          os: '',
+            afterEndSlash(instance.networkInterfaces?.[0].subnetwork ?? '') ??
+            '',
+          instanceState: instance.status ?? '',
+          instanceType: afterEndSlash(instance.machineType ?? '') ?? '',
+          instanceOs: '',
           privateIp: instance.networkInterfaces?.[0].networkIP ?? '',
           publicIp:
             instance.networkInterfaces?.[0].accessConfigs?.[0].natIP ?? '',

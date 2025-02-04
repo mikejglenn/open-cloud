@@ -35,14 +35,39 @@ export function RegistrationForm() {
 
   return (
     <>
-      <h1>Register now!</h1>
-      <form onSubmit={handleSubmit}>
-        <label title="Username" />
-        <input required name="username" type="text" />
-        <label title="Password" />
-        <input required name="password" type="password" />
-        <button disabled={isLoading}>Register</button>
-      </form>
+      <h2 className="text-3xl">Register now!</h2>
+      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <form className="card-body" onSubmit={handleSubmit}>
+          <fieldset className="fieldset">
+            <label className="fieldset-label" htmlFor="username">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              className="input"
+              placeholder="Username"
+              required
+            />
+            <label className="fieldset-label" htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              className="input"
+              placeholder="Password"
+              required
+            />
+            <div></div>
+            <button className="btn btn-neutral mt-4" disabled={isLoading}>
+              Register
+            </button>
+          </fieldset>
+        </form>
+      </div>
     </>
   );
 }

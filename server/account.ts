@@ -8,8 +8,8 @@ export type Account = {
   name: string;
   provider: string;
   account: string;
-  accessKey: string;
-  secretKey: string;
+  credentialIdentity: string;
+  credentialSecret: string;
 };
 
 export async function getAccountsByUserId(userId: number): Promise<Account[]> {
@@ -36,7 +36,7 @@ export async function getAccountByAccountId(
   const params = [userId, accountId];
   const result = await db.query<Account>(sql, params);
   const account = result.rows[0];
-  account.accessKey = decryptText(account.accessKey);
+  account.credentialIdentity = decryptText(account.credentialIdentity);
   return account;
 }
 
@@ -44,13 +44,20 @@ export async function createAccount(
   userId: number,
   body: Account
 ): Promise<Account> {
-  const { name, provider, account, accessKey, secretKey } = body;
-  if (!name || !provider || !account || !accessKey || !secretKey) {
+  const { name, provider, account, credentialIdentity, credentialSecret } =
+    body;
+  if (
+    !name ||
+    !provider ||
+    !account ||
+    !credentialIdentity ||
+    !credentialSecret
+  ) {
     throw new ClientError(400, 'account info is missing');
   }
   const sql = `
     insert into "accounts" ("userId", "name", "provider", "account",
-    "accessKey", "secretKey")
+    "credentialIdentity", "credentialSecret")
     values ($1, $2, $3, $4, $5, $6)
     returning *;
   `;
@@ -59,8 +66,8 @@ export async function createAccount(
     name,
     provider,
     account,
-    encryptText(accessKey),
-    encryptText(secretKey),
+    encryptText(credentialIdentity),
+    encryptText(credentialSecret),
   ];
   const result = await db.query<Account>(sql, params);
   const createdAccount = result.rows[0];
@@ -72,8 +79,15 @@ export async function updateAccount(
   accountId: number,
   body: Account
 ): Promise<Account> {
-  const { name, provider, account, accessKey, secretKey } = body;
-  if (!name || !provider || !account || !accessKey || !secretKey) {
+  const { name, provider, account, credentialIdentity, credentialSecret } =
+    body;
+  if (
+    !name ||
+    !provider ||
+    !account ||
+    !credentialIdentity ||
+    !credentialSecret
+  ) {
     throw new ClientError(400, 'account info is missing');
   }
   const sql = `
@@ -81,8 +95,8 @@ export async function updateAccount(
        set "name"            = $3,
            "provider"        = $4,
            "account"         = $5,
-           "accessKey"       = $6,
-           "secretKey"       = $7
+           "credentialIdentity"       = $6,
+           "credentialSecret"       = $7
      where "userId" = $1 and "accountId" = $2
     returning *;
   `;
@@ -92,8 +106,8 @@ export async function updateAccount(
     name,
     provider,
     account,
-    encryptText(accessKey),
-    encryptText(secretKey),
+    encryptText(credentialIdentity),
+    encryptText(credentialSecret),
   ];
   const result = await db.query<Account>(sql, params);
   const createdAccount = result.rows[0];
