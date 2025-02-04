@@ -30,8 +30,11 @@ export async function getAllGcpVmInstances(
       for (const instance of instances) {
         VMsInfo.push({
           name: instance.name ?? '',
+          provider: 'GCP',
+          account: account.account,
           instanceId: instance.id ? `${instance.id}` : '',
           region: afterEndSlash(zone)?.slice(0, -2) ?? '',
+          zone: afterEndSlash(zone) ?? '',
           vpcId:
             afterEndSlash(instance.networkInterfaces?.[0].network ?? '') ?? '',
           subnetId:

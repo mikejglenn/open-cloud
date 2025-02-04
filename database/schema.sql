@@ -32,6 +32,7 @@ CREATE TABLE "virtualMachines" (
   "name" text NOT NULL,
   "instanceId" text UNIQUE NOT NULL,
   "region" text NOT NULL,
+  "zone" text NOT NULL,
   "vpcId" text NOT NULL,
   "subnetId" text NOT NULL,
   "instanceState" text NOT NULL,

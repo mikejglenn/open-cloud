@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useUser } from '../components/useUser';
 import { VirtualMachine, readVirtualMachines } from '../lib';
 import { VmCard } from '../components/VmCard';
+import { FiExternalLink } from 'react-icons/fi';
 
 export function VirtualMachines() {
   const [virtualMachines, setVirtualMachines] = useState<VirtualMachine[]>([]);
@@ -29,7 +30,6 @@ export function VirtualMachines() {
 
   function handleOnClick(vm: VirtualMachine) {
     setActive(vm.instanceId);
-    console.log(active, vm.instanceId);
     setVirtualMachine(vm);
   }
 
@@ -64,7 +64,7 @@ export function VirtualMachines() {
               <th>Public IP</th>
               <th>Tags</th>
               <th>Launch Time</th>
-              <th>Last Seen</th>
+              {/* <th>Last Seen</th> */}
             </tr>
           </thead>
           <tbody>
@@ -73,9 +73,21 @@ export function VirtualMachines() {
                 key={vm.instanceId}
                 className={active === vm.instanceId ? '!bg-neutral' : undefined}
                 onClick={() => handleOnClick(vm)}>
-                <td>{vm.name}</td>
-                <td>provider</td>
-                <td>account</td>
+                <td>
+                  {vm.name}
+                  <a
+                    className="link"
+                    href={
+                      vm.provider === 'AWS'
+                        ? `https://${vm.region}.console.aws.amazon.com/ec2/home?region=${vm.region}#InstanceDetails:instanceId=${vm.instanceId}`
+                        : `https://console.cloud.google.com/compute/instancesDetail/zones/${vm.zone}/instances/${vm.name}?project=${vm.account}`
+                    }
+                    target="_blank">
+                    <FiExternalLink className="inline pb-1 pl-1" />
+                  </a>
+                </td>
+                <td>{vm.provider}</td>
+                <td>{vm.accountName}</td>
                 <td>{vm.region}</td>
                 <td>{vm.instanceId}</td>
                 <td>{vm.vpcId}</td>
@@ -86,7 +98,7 @@ export function VirtualMachines() {
                 <td>{vm.publicIp}</td>
                 <td>{vm.tags}</td>
                 <td>{`${vm.launchTime}`}</td>
-                <td>null</td>
+                {/* <td>null</td> */}
               </tr>
             ))}
           </tbody>

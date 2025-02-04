@@ -20,8 +20,12 @@ type Auth = {
 
 export type VirtualMachine = {
   name: string;
+  provider: string;
+  accountName: string;
+  account: string;
   instanceId: string;
   region: string;
+  zone: string;
   vpcId: string;
   subnetId: string;
   instanceState: string;
