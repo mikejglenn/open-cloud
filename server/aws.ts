@@ -27,8 +27,8 @@ export async function getAllAwsVmInstances(
     const client = new EC2Client({
       region,
       credentials: {
-        accessKeyId: decryptText(account.accessKey),
-        secretAccessKey: decryptText(account.secretKey),
+        accessKeyId: decryptText(account.credentialIdentity),
+        secretAccessKey: decryptText(account.credentialSecret),
       },
     });
 
@@ -47,9 +47,9 @@ export async function getAllAwsVmInstances(
             region,
             vpcId: instance.VpcId ?? '',
             subnetId: instance.SubnetId ?? '',
-            state: instance.State?.Name ?? '',
-            type: instance.InstanceType ?? '',
-            os: instance.PlatformDetails ?? '',
+            instanceState: instance.State?.Name ?? '',
+            instanceType: instance.InstanceType ?? '',
+            instanceOs: instance.PlatformDetails ?? '',
             privateIp: instance.PrivateIpAddress ?? '',
             publicIp: instance.PublicIpAddress ?? '',
             tags: getTags(instance.Tags ?? []) ?? '',

@@ -127,8 +127,8 @@ export function AccountForm() {
         </label>
         <textarea
           className="textarea block"
-          name="accessKey"
-          defaultValue={account?.accessKey ?? ''}
+          name="credentialIdentity"
+          defaultValue={account?.credentialIdentity ?? ''}
           required
         />
 
@@ -137,8 +137,8 @@ export function AccountForm() {
         </label>
         <textarea
           className="textarea block"
-          name="secretKey"
-          defaultValue={account?.secretKey ?? ''}
+          name="credentialSecret"
+          defaultValue={account?.credentialSecret ?? ''}
           required
         />
         {/* {isEditing && (

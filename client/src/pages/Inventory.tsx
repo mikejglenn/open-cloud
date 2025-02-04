@@ -9,21 +9,21 @@ export function Inventory() {
   return (
     <>
       <Link
-        to="inventory/virtual-machines"
+        to="/inventory/virtual-machines"
         className="card bg-neutral text-neutral-content w-96 mb-2">
         <div className="card-body items-center text-center">
           <h2 className="card-title">Virtual Machines</h2>
         </div>
       </Link>
       <Link
-        to="inventory/object-storage"
+        to="/inventory/object-storage"
         className="card bg-neutral text-neutral-content w-96 mb-2">
         <div className="card-body items-center text-center">
           <h2 className="card-title">Object Storage</h2>
         </div>
       </Link>
       <Link
-        to="inventory/vpc-networks"
+        to="/inventory/vpc-networks"
         className="card bg-neutral text-neutral-content w-96 mb-2">
         <div className="card-body items-center text-center">
           <h2 className="card-title">VPC Networks</h2>

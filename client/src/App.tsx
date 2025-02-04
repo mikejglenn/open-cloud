@@ -8,6 +8,7 @@ import { Home } from './pages/Home';
 import { Inventory } from './pages/Inventory';
 import { VirtualMachines } from './pages/VirtualMachines';
 import { ObjectStorage } from './pages/ObjectStorage';
+import { VpcNetworks } from './pages/VpcNetworks';
 
 export default function App() {
   return (
@@ -15,14 +16,15 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
-          <Route path="accounts/:accountId" element={<AccountForm />} />
-          <Route path="inventory" element={<Inventory />} />
+          <Route path="/accounts" element={<Home />} />
+          <Route path="/accounts/:accountId" element={<AccountForm />} />
+          <Route path="/inventory" element={<Inventory />} />
           <Route
             path="inventory/virtual-machines"
             element={<VirtualMachines />}
           />
-          <Route path="inventory/object-storage" element={<ObjectStorage />} />
-          <Route path="inventory/vpc-networks" element={<Inventory />} />
+          <Route path="/inventory/object-storage" element={<ObjectStorage />} />
+          <Route path="/inventory/vpc-networks" element={<VpcNetworks />} />
           <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
           <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
           <Route path="*" element={<NotFound />} />

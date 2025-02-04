@@ -31,10 +31,10 @@ export function VmCard({ vm }: Props) {
         <span className="font-bold">Subnet ID:</span> {vm.subnetId}
       </div>
       <div>
-        <span className="font-bold">State:</span> {vm.state}
+        <span className="font-bold">State:</span> {vm.instanceState}
       </div>
       <div>
-        <span className="font-bold">Instance Type:</span> {vm.type}
+        <span className="font-bold">Instance Type:</span> {vm.instanceType}
       </div>
       <div>
         <span className="font-bold">Private IP:</span> {vm.privateIp}

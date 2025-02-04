@@ -9,9 +9,9 @@ export type VirtualMachine = {
   region: string;
   vpcId: string;
   subnetId: string;
-  state: string;
-  type: string;
-  os: string;
+  instanceState: string;
+  instanceType: string;
+  instanceOs: string;
   privateIp: string;
   publicIp: string;
   tags: string;
@@ -22,8 +22,8 @@ async function dbSelectAccountVMs(
   accountId: number
 ): Promise<VirtualMachine[]> {
   const sql = `
-    select "name", "instanceId", "region", "vpcId", "subnetId", "state", "type",
-           "os", "privateIp", "publicIp", "tags", "launchTime"
+    select "name", "instanceId", "region", "vpcId", "subnetId", "instanceState",
+    "instanceType", "instanceOs", "privateIp", "publicIp", "tags", "launchTime"
       from "virtualMachines"
      where "accountId" = $1;
   `;
@@ -38,14 +38,14 @@ async function dbWriteVMs(
   for (const vm of virtualMachines) {
     const sql = `
       insert into "virtualMachines" ("accountId", "name", "instanceId",
-      "region", "vpcId", "subnetId", "state", "type", "os", "privateIp",
-      "publicIp", "tags", "launchTime")
+      "region", "vpcId", "subnetId", "instanceState", "instanceType",
+      "instanceOs", "privateIp", "publicIp", "tags", "launchTime")
       values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
       on conflict ("instanceId")
       do update set "name"              = $2,
-                    "state"             = $7,
-                    "type"              = $8,
-                    "os"                = $9,
+                    "instanceState"             = $7,
+                    "instanceType"              = $8,
+                    "instanceOs"                = $9,
                     "privateIp"         = $10,
                     "publicIp"          = $11,
                     "tags"              = $12,
@@ -59,9 +59,9 @@ async function dbWriteVMs(
       vm.region,
       vm.vpcId,
       vm.subnetId,
-      vm.state,
-      vm.type,
-      vm.os,
+      vm.instanceState,
+      vm.instanceType,
+      vm.instanceOs,
       vm.privateIp,
       vm.publicIp,
       vm.tags,
@@ -72,28 +72,34 @@ async function dbWriteVMs(
 }
 
 export async function getAllVMs(
-  accounts: Account[],
-  refresh: string | undefined
+  accounts: Account[]
+  // refresh: string | undefined
 ): Promise<VirtualMachine[]> {
-  const virtualMachines = [];
+  let virtualMachines = [];
 
-  if (refresh === 'yes') {
-    for (const account of accounts) {
-      switch (account.provider) {
-        case 'AWS':
-          virtualMachines.push(...(await getAllAwsVmInstances(account)));
-          break;
-        case 'GCP':
-          virtualMachines.push(...(await getAllGcpVmInstances(account)));
-          break;
-      }
-      await dbWriteVMs(account.accountId, virtualMachines);
+  // if (refresh === 'yes') {
+  for (const account of accounts) {
+    switch (account.provider) {
+      case 'AWS':
+        virtualMachines.push(...(await getAllAwsVmInstances(account)));
+        break;
+      case 'GCP':
+        virtualMachines.push(...(await getAllGcpVmInstances(account)));
+        break;
     }
-  } else {
-    for (const account of accounts) {
-      virtualMachines.push(...(await dbSelectAccountVMs(account.accountId)));
-    }
+    await dbWriteVMs(account.accountId, virtualMachines);
   }
+
+  virtualMachines = [];
+  for (const account of accounts) {
+    virtualMachines.push(...(await dbSelectAccountVMs(account.accountId)));
+  }
+
+  // } else {
+  //   for (const account of accounts) {
+  //     virtualMachines.push(...(await dbSelectAccountVMs(account.accountId)));
+  //   }
+  // }
 
   return virtualMachines;
 }

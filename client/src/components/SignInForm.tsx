@@ -39,14 +39,39 @@ export function SignInForm() {
 
   return (
     <>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <label title="Username" />
-        <input required name="username" type="text" />
-        <label title="Password" />
-        <input required name="password" type="password" />
-        <button disabled={isLoading}>Sign In</button>
-      </form>
+      <h2 className="text-3xl">Sign In</h2>
+      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <form className="card-body" onSubmit={handleSubmit}>
+          <fieldset className="fieldset">
+            <label className="fieldset-label" htmlFor="username">
+              Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              className="input"
+              placeholder="Username"
+              required
+            />
+            <label className="fieldset-label" htmlFor="password">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              className="input"
+              placeholder="Password"
+              required
+            />
+            <div></div>
+            <button className="btn btn-neutral mt-4" disabled={isLoading}>
+              Sign In
+            </button>
+          </fieldset>
+        </form>
+      </div>
     </>
   );
 }

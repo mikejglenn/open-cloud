@@ -80,8 +80,8 @@ export function VirtualMachines() {
                 <td>{vm.instanceId}</td>
                 <td>{vm.vpcId}</td>
                 <td>{vm.subnetId}</td>
-                <td>{vm.state}</td>
-                <td>{vm.type}</td>
+                <td>{vm.instanceState}</td>
+                <td>{vm.instanceType}</td>
                 <td>{vm.privateIp}</td>
                 <td>{vm.publicIp}</td>
                 <td>{vm.tags}</td>
