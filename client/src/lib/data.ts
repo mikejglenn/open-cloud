@@ -20,8 +20,12 @@ type Auth = {
 
 export type VirtualMachine = {
   name: string;
+  provider: string;
+  accountName: string;
+  account: string;
   instanceId: string;
   region: string;
+  zone: string;
   vpcId: string;
   subnetId: string;
   instanceState: string;
@@ -144,7 +148,7 @@ export async function readVirtualMachines(): Promise<VirtualMachine[]> {
       Authorization: `Bearer ${readToken()}`,
     },
   };
-  const response = await fetch('/api/virtual-machines', req);
+  const response = await fetch('/api/inventory/virtual-machines', req);
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }

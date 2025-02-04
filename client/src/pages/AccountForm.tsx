@@ -68,7 +68,7 @@ export function AccountForm() {
       <h1>{isEditing ? 'Edit Account' : 'New Account'}</h1>
 
       <form onSubmit={handleSubmit} className="form">
-        <label className="label">
+        <label className="label" htmlFor="accountName">
           {!provider || provider === 'AWS' ? 'Account Name' : 'Project Name'}
         </label>
         <input
@@ -77,6 +77,7 @@ export function AccountForm() {
           defaultValue={account?.name ?? ''}
           required
           type="text"
+          id="accountName"
         />
 
         <fieldset className="fieldset flex">
@@ -111,7 +112,7 @@ export function AccountForm() {
           />
         </fieldset>
 
-        <label className="label">
+        <label className="label" htmlFor="accountId">
           {!provider || provider === 'AWS' ? 'Account ID' : 'Project ID'}
         </label>
         <input
@@ -120,26 +121,31 @@ export function AccountForm() {
           defaultValue={account?.account ?? ''}
           required
           type="text"
+          id="accountId"
         />
 
-        <label className="label">
+        <label className="label" htmlFor="credentialIdentity">
           {!provider || provider === 'AWS' ? 'Access Key' : 'Client Email'}
         </label>
-        <textarea
-          className="textarea block"
+        <input
+          type="text"
+          className="input block"
           name="credentialIdentity"
           defaultValue={account?.credentialIdentity ?? ''}
           required
+          id="credentialIdentity"
         />
 
-        <label className="label">
+        <label className="label" htmlFor="credentialSecret">
           {!provider || provider === 'AWS' ? 'Secret Key' : 'Private Key'}
         </label>
-        <textarea
-          className="textarea block"
+        <input
+          type="password"
+          className="input block"
           name="credentialSecret"
           defaultValue={account?.credentialSecret ?? ''}
           required
+          id="credentialSecret"
         />
         {/* {isEditing && (
           <button type="button" onClick={() => setIsDeleting(true)}>

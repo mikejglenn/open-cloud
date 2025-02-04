@@ -37,6 +37,7 @@ export async function getAccountByAccountId(
   const result = await db.query<Account>(sql, params);
   const account = result.rows[0];
   account.credentialIdentity = decryptText(account.credentialIdentity);
+  account.credentialSecret = decryptText(account.credentialSecret);
   return account;
 }
 

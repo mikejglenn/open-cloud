@@ -22,7 +22,7 @@ export async function getAllAwsVmInstances(
 ): Promise<VirtualMachine[]> {
   const VMsInfo: VirtualMachine[] = [];
 
-  const regions = ['us-east-2' /*, 'us-east-1', 'us-west-1', 'us-west-2' */];
+  const regions = ['us-east-2', 'us-east-1' /*, 'us-west-1', 'us-west-2' */];
   for (const region of regions) {
     const client = new EC2Client({
       region,
@@ -43,8 +43,11 @@ export async function getAllAwsVmInstances(
         for (const instance of instanceList) {
           VMsInfo.push({
             name: getNameTagValue(instance.Tags ?? []) ?? '',
-            instanceId: instance.InstanceId ?? '',
+            provider: 'AWS',
+            account: account.account,
             region,
+            zone: instance.Placement?.AvailabilityZone ?? '',
+            instanceId: instance.InstanceId ?? '',
             vpcId: instance.VpcId ?? '',
             subnetId: instance.SubnetId ?? '',
             instanceState: instance.State?.Name ?? '',
