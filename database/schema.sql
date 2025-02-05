@@ -50,7 +50,7 @@ CREATE TABLE "virtualMachines" (
 CREATE TABLE "buckets" (
   "bucketId" serial PRIMARY KEY,
   "accountId" integer,
-  "name" text NOT NULL,
+  "name" text UNIQUE NOT NULL,
   "region" text NOT NULL,
   "creationDate" timestamptz NOT NULL,
   "lastSeen" timestamptz,
