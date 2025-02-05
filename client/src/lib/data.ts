@@ -151,13 +151,18 @@ export async function removeAccount(accountId: number): Promise<void> {
   }
 }
 
-export async function readVirtualMachines(): Promise<VirtualMachine[]> {
+export async function readVirtualMachines(
+  refresh: string
+): Promise<VirtualMachine[]> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,
     },
   };
-  const response = await fetch('/api/inventory/virtual-machines', req);
+  const response = await fetch(
+    `/api/inventory/virtual-machines?refresh=${refresh}`,
+    req
+  );
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
@@ -165,13 +170,16 @@ export async function readVirtualMachines(): Promise<VirtualMachine[]> {
   return data;
 }
 
-export async function readBuckets(): Promise<Bucket[]> {
+export async function readBuckets(refresh: string): Promise<Bucket[]> {
   const req = {
     headers: {
       Authorization: `Bearer ${readToken()}`,
     },
   };
-  const response = await fetch('/api/inventory/object-storage', req);
+  const response = await fetch(
+    `/api/inventory/object-storage?refresh=${refresh}`,
+    req
+  );
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }

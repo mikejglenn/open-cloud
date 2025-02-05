@@ -6,7 +6,7 @@ import { Bucket } from './object-storage';
 export async function getAllAwsBuckets(account: Account): Promise<Bucket[]> {
   const bucketsInfo: Bucket[] = [];
 
-  const region = 'us-west-2';
+  const region = 'us-west-1';
   const client = new S3Client({
     region,
     credentials: {

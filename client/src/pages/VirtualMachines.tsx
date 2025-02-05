@@ -16,7 +16,10 @@ export function VirtualMachines() {
     async function load() {
       try {
         if (user) {
-          const virtualMachines = await readVirtualMachines();
+          // stale while refresh call. first refresh 'no' then refresh 'yes'
+          let virtualMachines = await readVirtualMachines('no');
+          setVirtualMachines(virtualMachines);
+          virtualMachines = await readVirtualMachines('yes');
           setVirtualMachines(virtualMachines);
         }
       } catch (err) {

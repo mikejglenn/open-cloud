@@ -1,7 +1,7 @@
 import { db } from './db';
 import { Account } from './account';
-import { getAllAwsVmInstances } from './awsEc2';
-import { getAllGcpVmInstances } from './gcpCompute';
+import { getAllAwsVmInstances } from './awsEC2';
+import { getAllGcpVmInstances } from './gcpComputeEngine';
 
 export type VirtualMachine = {
   name: string;
