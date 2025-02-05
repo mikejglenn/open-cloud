@@ -22,7 +22,7 @@ export async function getAllAwsVmInstances(
 ): Promise<VirtualMachine[]> {
   const VMsInfo: VirtualMachine[] = [];
 
-  const regions = ['us-east-2', 'us-east-1' /*, 'us-west-1', 'us-west-2' */];
+  const regions = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'];
   for (const region of regions) {
     const client = new EC2Client({
       region,

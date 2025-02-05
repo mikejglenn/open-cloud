@@ -11,7 +11,8 @@ import {
   updateAccount,
   deleteAccount,
 } from './account';
-import { getAllVMs } from './virtual-machines';
+import { getAllVMs, VirtualMachine } from './virtual-machines';
+import { Bucket, getAllBuckets } from './object-storage';
 
 export const hashKey = process.env.TOKEN_SECRET;
 if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
@@ -157,8 +158,29 @@ app.get(
         req.user.userId
       )) as Account[];
       const { refresh } = req.query;
-      const virtualMachines = await getAllVMs(accounts, `${refresh}`);
+      const virtualMachines = (await getAllVMs(
+        accounts,
+        `${refresh}`
+      )) as VirtualMachine[];
       res.json(virtualMachines);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+app.get(
+  '/api/inventory/object-storage',
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      if (!req.user) throw new ClientError(403, 'user not logged in');
+      const accounts = (await getAccountsByUserId(
+        req.user.userId
+      )) as Account[];
+      const { refresh } = req.query;
+      const buckets = (await getAllBuckets(accounts, `${refresh}`)) as Bucket[];
+      res.json(buckets);
     } catch (err) {
       next(err);
     }

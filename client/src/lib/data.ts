@@ -37,6 +37,15 @@ export type VirtualMachine = {
   launchTime: Date | undefined;
 };
 
+export type Bucket = {
+  name: string;
+  provider: string;
+  accountName: string;
+  account: string;
+  region: string;
+  creationDate: Date | undefined;
+};
+
 // needed if private key is pasted with literal '\n'
 function gcpPrivateKeyNewlineReplace(account: Account): void {
   if (account.provider === 'GCP')
@@ -153,5 +162,19 @@ export async function readVirtualMachines(): Promise<VirtualMachine[]> {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
   const data = (await response.json()) as VirtualMachine[];
+  return data;
+}
+
+export async function readBuckets(): Promise<Bucket[]> {
+  const req = {
+    headers: {
+      Authorization: `Bearer ${readToken()}`,
+    },
+  };
+  const response = await fetch('/api/inventory/object-storage', req);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  const data = (await response.json()) as Bucket[];
   return data;
 }
