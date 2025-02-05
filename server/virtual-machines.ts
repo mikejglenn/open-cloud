@@ -1,7 +1,7 @@
 import { db } from './db';
 import { Account } from './account';
-import { getAllAwsVmInstances } from './aws';
-import { getAllGcpVmInstances } from './gcp';
+import { getAllAwsVmInstances } from './awsEc2';
+import { getAllGcpVmInstances } from './gcpCompute';
 
 export type VirtualMachine = {
   name: string;
@@ -73,7 +73,7 @@ async function dbWriteVMs(
       vm.tags,
       vm.launchTime,
     ];
-    await db.query(sql, params);
+    await db.query<VirtualMachine>(sql, params);
   }
 }
 
