@@ -1,7 +1,7 @@
 import { db } from './db';
 import { Account } from './account';
 import { getAllAwsBuckets } from './awsS3';
-// import { getAllGcpBuckets } from './gcpCompute';
+import { getAllGcpBuckets } from './gcpCloudStorage';
 
 export type Bucket = {
   name: string;
@@ -55,7 +55,7 @@ export async function getAllBuckets(
           buckets.push(...(await getAllAwsBuckets(account)));
           break;
         case 'GCP':
-          // buckets.push(...(await getAllGcpBuckets(account)));
+          buckets.push(...(await getAllGcpBuckets(account)));
           break;
       }
       await dbWriteBuckets(account.accountId, buckets);

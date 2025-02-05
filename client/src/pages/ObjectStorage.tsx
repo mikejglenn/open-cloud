@@ -16,7 +16,9 @@ export function ObjectStorage() {
     async function load() {
       try {
         if (user) {
-          const buckets = await readBuckets();
+          let buckets = await readBuckets('no');
+          setBuckets(buckets);
+          buckets = await readBuckets('yes');
           setBuckets(buckets);
         }
       } catch (err) {
@@ -72,7 +74,7 @@ export function ObjectStorage() {
                     href={
                       bucket.provider === 'AWS'
                         ? `https://${bucket.region}.console.aws.amazon.com/s3/buckets/${bucket.name}`
-                        : '' //`https://console.cloud.google.com/compute/instancesDetail/zones/${vm.zone}/instances/${vm.name}?project=${vm.account}`
+                        : `https://console.cloud.google.com/storage/browser/${bucket.name}`
                     }
                     target="_blank">
                     <FiExternalLink className="inline pb-1 pl-1" />
