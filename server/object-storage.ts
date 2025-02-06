@@ -9,12 +9,13 @@ export type Bucket = {
   account: string;
   region: string;
   creationDate: Date | undefined;
+  lastSeen: Date;
 };
 
 async function dbSelectAccountBuckets(accountId: number): Promise<Bucket[]> {
   const sql = `
     select "b"."name", "provider", "a"."name" as "accountName", "account",
-    "region", "creationDate"
+    "region", "creationDate", "lastSeen"
       from "buckets" as "b"
       join "accounts" as "a" using ("accountId")
      where "accountId" = $1;
@@ -29,15 +30,18 @@ async function dbWriteBuckets(
 ): Promise<void> {
   for (const b of buckets) {
     const sql = `
-      insert into "buckets" ("accountId", "name", "region", "creationDate")
-      values ($1, $2, $3, $4)
+      insert into "buckets" ("accountId", "name", "region", "creationDate",
+      "lastSeen")
+      values ($1, $2, $3, $4, $5)
       on conflict ("name")
-      do update set "name"              = $2,
+      do update set "updatedAt"         = now(),
+                    "name"              = $2,
                     "region"            = $3,
-                    "creationDate"      = $4
+                    "creationDate"      = $4,
+                    "lastSeen"          = $5
       returning *;
     `;
-    const params = [accountId, b.name, b.region, b.creationDate];
+    const params = [accountId, b.name, b.region, b.creationDate, b.lastSeen];
     await db.query<Bucket>(sql, params);
   }
 }

@@ -3,7 +3,7 @@ import { Account } from './account';
 import { decryptText } from './crypto-text';
 import { VirtualMachine } from './virtual-machines';
 
-function afterEndSlash(str: string | undefined): string | undefined {
+function endSlash(str: string | undefined): string | undefined {
   return str?.split('/').pop();
 }
 
@@ -33,15 +33,13 @@ export async function getAllGcpVmInstances(
           provider: 'GCP',
           account: account.account,
           instanceId: instance.id ? `${instance.id}` : '',
-          region: afterEndSlash(zone)?.slice(0, -2) ?? '',
-          zone: afterEndSlash(zone) ?? '',
-          vpcId:
-            afterEndSlash(instance.networkInterfaces?.[0].network ?? '') ?? '',
+          region: endSlash(zone)?.slice(0, -2) ?? '',
+          zone: endSlash(zone) ?? '',
+          vpcId: endSlash(instance.networkInterfaces?.[0].network ?? '') ?? '',
           subnetId:
-            afterEndSlash(instance.networkInterfaces?.[0].subnetwork ?? '') ??
-            '',
+            endSlash(instance.networkInterfaces?.[0].subnetwork ?? '') ?? '',
           instanceState: instance.status ?? '',
-          instanceType: afterEndSlash(instance.machineType ?? '') ?? '',
+          instanceType: endSlash(instance.machineType ?? '') ?? '',
           instanceOs: '',
           privateIp: instance.networkInterfaces?.[0].networkIP ?? '',
           publicIp:
@@ -50,6 +48,7 @@ export async function getAllGcpVmInstances(
           launchTime: instance.creationTimestamp
             ? new Date(instance.creationTimestamp)
             : undefined,
+          lastSeen: new Date(),
         });
       }
     }

@@ -19,6 +19,7 @@ export type VirtualMachine = {
   publicIp: string;
   tags: string;
   launchTime: Date | undefined;
+  lastSeen: Date;
 };
 
 async function dbSelectAccountVMs(
@@ -27,7 +28,8 @@ async function dbSelectAccountVMs(
   const sql = `
     select "v"."name", "provider", "a"."name" as "accountName", "account",
     "instanceId", "region", "zone", "vpcId", "subnetId", "instanceState",
-    "instanceType", "instanceOs", "privateIp", "publicIp", "tags", "launchTime"
+    "instanceType", "instanceOs", "privateIp", "publicIp", "tags",
+    "launchTime", "lastSeen"
       from "virtualMachines" as "v"
       join "accounts" as "a" using ("accountId")
      where "accountId" = $1;
@@ -44,17 +46,19 @@ async function dbWriteVMs(
     const sql = `
       insert into "virtualMachines" ("accountId", "name", "instanceId",
       "region", "zone", "vpcId", "subnetId", "instanceState", "instanceType",
-      "instanceOs", "privateIp", "publicIp", "tags", "launchTime")
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      "instanceOs", "privateIp", "publicIp", "tags", "launchTime", "lastSeen")
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       on conflict ("instanceId")
-      do update set "name"              = $2,
+      do update set "updatedAt"         = now(),
+                    "name"              = $2,
                     "instanceState"     = $8,
                     "instanceType"      = $9,
                     "instanceOs"        = $10,
                     "privateIp"         = $11,
                     "publicIp"          = $12,
                     "tags"              = $13,
-                    "launchTime"        = $14
+                    "launchTime"        = $14,
+                    "lastSeen"          = $15
       returning *;
     `;
     const params = [
@@ -72,6 +76,7 @@ async function dbWriteVMs(
       vm.publicIp,
       vm.tags,
       vm.launchTime,
+      vm.lastSeen,
     ];
     await db.query<VirtualMachine>(sql, params);
   }

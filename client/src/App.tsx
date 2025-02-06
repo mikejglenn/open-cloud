@@ -8,7 +8,7 @@ import { Home } from './pages/Home';
 import { Inventory } from './pages/Inventory';
 import { VirtualMachines } from './pages/VirtualMachines';
 import { ObjectStorage } from './pages/ObjectStorage';
-import { VpcNetworks } from './pages/VpcNetworks';
+import { ManagedDbs } from './pages/ManagedDbs';
 
 export default function App() {
   return (
@@ -24,7 +24,7 @@ export default function App() {
             element={<VirtualMachines />}
           />
           <Route path="/inventory/object-storage" element={<ObjectStorage />} />
-          <Route path="/inventory/vpc-networks" element={<VpcNetworks />} />
+          <Route path="/inventory/managed-databases" element={<ManagedDbs />} />
           <Route path="/sign-up" element={<AuthPage mode="sign-up" />} />
           <Route path="/sign-in" element={<AuthPage mode="sign-in" />} />
           <Route path="*" element={<NotFound />} />

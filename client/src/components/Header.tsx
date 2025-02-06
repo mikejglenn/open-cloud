@@ -47,7 +47,7 @@ export function Header() {
               <Link to="/inventory/object-storage">Object Storage</Link>
             </li>
             <li>
-              <Link to="/inventory/vpc-networks">VPC Networks</Link>
+              <Link to="/inventory/managed-databases">Managed Databases</Link>
             </li>
           </ul>
         </aside>

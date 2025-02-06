@@ -147,11 +147,14 @@ export function AccountForm() {
           required
           id="credentialSecret"
         />
-        {/* {isEditing && (
-          <button type="button" onClick={() => setIsDeleting(true)}>
+        {isEditing && (
+          <button
+            className="hidden"
+            type="button"
+            onClick={() => setIsDeleting(true)}>
             Delete Account
           </button>
-        )} */}
+        )}
         <button className="btn">SAVE</button>
       </form>
       {isDeleting && (

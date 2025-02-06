@@ -11,10 +11,10 @@ function getNameTagValue(tags: Tag[]): Tag['Value'] {
 
 function getTags(tags: Tag[]): string {
   if (!tags) return '';
-  const tagDict: Record<string, string> = {};
+  const tagArr = [];
   for (const tag of tags)
-    if (tag.Key && tag.Value) tagDict[tag.Key] = tag.Value;
-  return JSON.stringify(tagDict);
+    if (tag.Key && tag.Value) tagArr.push(`"${tag.Key}":"${tag.Value}"`);
+  return tagArr.join(',');
 }
 
 export async function getAllAwsVmInstances(
@@ -57,6 +57,7 @@ export async function getAllAwsVmInstances(
             publicIp: instance.PublicIpAddress ?? '',
             tags: getTags(instance.Tags ?? []) ?? '',
             launchTime: instance.LaunchTime,
+            lastSeen: new Date(),
           });
         }
       }

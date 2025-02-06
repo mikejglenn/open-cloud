@@ -1,5 +1,5 @@
 import { FiExternalLink } from 'react-icons/fi';
-import { VirtualMachine } from '../lib';
+import { VirtualMachine, stateNormalize } from '../lib';
 
 type Props = {
   vm: VirtualMachine | undefined;
@@ -31,6 +31,11 @@ export function VmCard({ vm }: Props) {
       </div>
       <div>
         <span className="font-bold">Provider:</span> {vm.provider}
+        <img
+          src={`/${vm.provider}.svg`}
+          className="w-8 inline ml-2 pb-1"
+          alt="cloud"
+        />
       </div>
       <div>
         <span className="font-bold">Account:</span> {vm.accountName}
@@ -48,7 +53,8 @@ export function VmCard({ vm }: Props) {
         <span className="font-bold">Subnet ID:</span> {vm.subnetId}
       </div>
       <div>
-        <span className="font-bold">State:</span> {vm.instanceState}
+        <span className="font-bold">State:</span>{' '}
+        {stateNormalize(vm.instanceState)}
       </div>
       <div>
         <span className="font-bold">Instance Type:</span> {vm.instanceType}
@@ -65,9 +71,9 @@ export function VmCard({ vm }: Props) {
       <div>
         <span className="font-bold">Launch Time:</span> {`${vm.launchTime}`}
       </div>
-      {/* <div>
-        <span className="font-bold">Last Seen:</span> null
-      </div> */}
+      <div>
+        <span className="font-bold">Last Seen:</span> {`${vm.lastSeen}`}
+      </div>
     </div>
   );
 }

@@ -20,8 +20,9 @@ export async function getAllGcpBuckets(account: Account): Promise<Bucket[]> {
       name: bucket.name ?? '',
       provider: 'GCP',
       account: account.account,
-      region: bucket.metadata.location ?? '',
+      region: bucket.metadata.location?.toLocaleLowerCase() ?? '',
       creationDate: new Date(bucket.metadata.timeCreated ?? ''),
+      lastSeen: new Date(),
     });
   }
 

@@ -26,6 +26,7 @@ export async function getAllAwsBuckets(account: Account): Promise<Bucket[]> {
         account: account.account,
         region: bucket.BucketRegion ?? '',
         creationDate: bucket.CreationDate,
+        lastSeen: new Date(),
       });
     }
   }
