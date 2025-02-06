@@ -23,10 +23,10 @@ export function Inventory() {
         </div>
       </Link>
       <Link
-        to="/inventory/vpc-networks"
+        to="/inventory/managed-databases"
         className="card bg-neutral text-neutral-content w-96 mb-2">
         <div className="card-body items-center text-center">
-          <h2 className="card-title">VPC Networks</h2>
+          <h2 className="card-title">Managed Databases</h2>
         </div>
       </Link>
     </>

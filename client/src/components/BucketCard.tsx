@@ -23,7 +23,7 @@ export function BucketCard({ bucket }: Props) {
           href={
             bucket.provider === 'AWS'
               ? `https://${bucket.region}.console.aws.amazon.com/s3/buckets/${bucket.name}`
-              : '' //`https://console.cloud.google.com/compute/instancesDetail/zones/${vm.zone}/instances/${vm.name}?project=${vm.account}`
+              : `https://console.cloud.google.com/storage/browser/${bucket.name}`
           }
           target="_blank">
           <FiExternalLink className="inline pb-1" />
@@ -31,6 +31,11 @@ export function BucketCard({ bucket }: Props) {
       </div>
       <div>
         <span className="font-bold">Provider:</span> {bucket.provider}
+        <img
+          src={`/${bucket.provider}.svg`}
+          className="w-8 inline ml-2 pb-1"
+          alt="cloud"
+        />
       </div>
       <div>
         <span className="font-bold">Account:</span> {bucket.accountName}
@@ -42,9 +47,9 @@ export function BucketCard({ bucket }: Props) {
         <span className="font-bold">Creation Date:</span>{' '}
         {`${bucket.creationDate}`}
       </div>
-      {/* <div>
-        <span className="font-bold">Last Seen:</span> null
-      </div> */}
+      <div>
+        <span className="font-bold">Last Seen:</span> {`${bucket.lastSeen}`}
+      </div>
     </div>
   );
 }

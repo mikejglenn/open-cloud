@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '../components/useUser';
-import { VirtualMachine, readVirtualMachines } from '../lib';
+import { VirtualMachine, readVirtualMachines, stateNormalize } from '../lib';
 import { VmCard } from '../components/VmCard';
 import { FiExternalLink } from 'react-icons/fi';
 
@@ -67,7 +67,7 @@ export function VirtualMachines() {
               <th>Public IP</th>
               <th>Tags</th>
               <th>Launch Time</th>
-              {/* <th>Last Seen</th> */}
+              <th>Last Seen</th>
             </tr>
           </thead>
           <tbody>
@@ -89,19 +89,26 @@ export function VirtualMachines() {
                     <FiExternalLink className="inline pb-1 pl-1" />
                   </a>
                 </td>
-                <td>{vm.provider}</td>
+                <td>
+                  {vm.provider}
+                  <img
+                    src={`/${vm.provider}.svg`}
+                    className="w-8 inline ml-2 pb-1"
+                    alt="cloud"
+                  />
+                </td>
                 <td>{vm.accountName}</td>
                 <td>{vm.region}</td>
                 <td>{vm.instanceId}</td>
                 <td>{vm.vpcId}</td>
                 <td>{vm.subnetId}</td>
-                <td>{vm.instanceState}</td>
+                <td>{stateNormalize(vm.instanceState)}</td>
                 <td>{vm.instanceType}</td>
                 <td>{vm.privateIp}</td>
                 <td>{vm.publicIp}</td>
                 <td>{vm.tags}</td>
                 <td>{`${vm.launchTime}`}</td>
-                {/* <td>null</td> */}
+                <td>{`${vm.lastSeen}`}</td>
               </tr>
             ))}
           </tbody>

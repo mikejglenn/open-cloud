@@ -58,7 +58,7 @@ export function ObjectStorage() {
               <th>Account</th>
               <th>Region</th>
               <th>Creation Date</th>
-              {/* <th>Last Seen</th> */}
+              <th>Last Seen</th>
             </tr>
           </thead>
           <tbody>
@@ -80,11 +80,18 @@ export function ObjectStorage() {
                     <FiExternalLink className="inline pb-1 pl-1" />
                   </a>
                 </td>
-                <td>{bucket.provider}</td>
+                <td>
+                  {bucket.provider}
+                  <img
+                    src={`/${bucket.provider}.svg`}
+                    className="w-8 inline ml-2 pb-1"
+                    alt="cloud"
+                  />
+                </td>
                 <td>{bucket.accountName}</td>
                 <td>{bucket.region}</td>
                 <td>{`${bucket.creationDate}`}</td>
-                {/* <td>null</td> */}
+                <td>{`${bucket.lastSeen}`}</td>
               </tr>
             ))}
           </tbody>

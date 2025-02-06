@@ -35,6 +35,7 @@ export type VirtualMachine = {
   publicIp: string;
   tags: string;
   launchTime: Date | undefined;
+  lastSeen: Date;
 };
 
 export type Bucket = {
@@ -44,7 +45,45 @@ export type Bucket = {
   account: string;
   region: string;
   creationDate: Date | undefined;
+  lastSeen: Date;
 };
+
+export function stateNormalize(state: string): string {
+  switch (state) {
+    case 'pending':
+      return 'Pending';
+    case 'running':
+      return 'Running';
+    case 'shutting-down':
+      return 'Shutting-Down';
+    case 'stopped':
+      return 'Stopped';
+    case 'stopping':
+      return 'Stopping';
+    case 'terminated':
+      return 'Terminated';
+    case 'PENDING_STOP':
+      return 'Shutting-Down';
+    case 'PROVISIONING':
+      return 'Provisioning';
+    case 'REPAIRING':
+      return 'Repairing';
+    case 'RUNNING':
+      return 'Running';
+    case 'STOPPING':
+      return 'Stopping';
+    case 'STAGING':
+      return 'Staging';
+    case 'SUSPENDED':
+      return 'Suspended';
+    case 'SUSPENDING':
+      return 'Suspending';
+    case 'TERMINATED':
+      return 'Stopped';
+    default:
+      return '';
+  }
+}
 
 // needed if private key is pasted with literal '\n'
 function gcpPrivateKeyNewlineReplace(account: Account): void {

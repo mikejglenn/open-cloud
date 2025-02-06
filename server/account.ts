@@ -93,10 +93,11 @@ export async function updateAccount(
   }
   const sql = `
     update "accounts"
-       set "name"            = $3,
-           "provider"        = $4,
-           "account"         = $5,
-           "credentialIdentity"       = $6,
+       set "updatedAt"              = now(),
+           "name"                   = $3,
+           "provider"               = $4,
+           "account"                = $5,
+           "credentialIdentity"     = $6,
            "credentialSecret"       = $7
      where "userId" = $1 and "accountId" = $2
     returning *;
