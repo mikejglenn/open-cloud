@@ -1,7 +1,7 @@
 import { db } from './db';
 import { Account } from './account';
-import { getAllAwsVmInstances } from './awsEC2';
-import { getAllGcpVmInstances } from './gcpComputeEngine';
+import { getAllAwsVmInstances } from './aws-ec2';
+import { getAllGcpVmInstances } from './gcp-compute-engine';
 
 export type VirtualMachine = {
   name: string;
@@ -32,7 +32,8 @@ async function dbSelectAccountVMs(
     "launchTime", "lastSeen"
       from "virtualMachines" as "v"
       join "accounts" as "a" using ("accountId")
-     where "accountId" = $1;
+     where "accountId" = $1
+     order by "virtualMachineId";
   `;
   const result = await db.query<VirtualMachine>(sql, [accountId]);
   return result.rows;

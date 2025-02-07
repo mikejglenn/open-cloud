@@ -20,7 +20,7 @@ export function Header() {
           <NavLink to="/inventory" className="btn btn-ghost text-xl">
             Inventory
           </NavLink>
-          <NavLink to="/cost" className="btn btn-ghost text-xl">
+          <NavLink to="/cost" className="btn btn-ghost text-xl hidden">
             Cost
           </NavLink>
         </div>
@@ -53,7 +53,6 @@ export function Header() {
         </aside>
 
         <main className="flex-grow w-64 p-4">
-          {!user && <p>Not signed in!</p>}
           <Outlet />
         </main>
       </div>
