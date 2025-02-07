@@ -9,7 +9,7 @@ export function BucketCard({ bucket }: Props) {
   if (!bucket)
     return (
       <div className="border-2 border-base-300 p-4">
-        Select an item for more details.
+        Select an item for details.
       </div>
     );
 

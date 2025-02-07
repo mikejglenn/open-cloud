@@ -49,40 +49,24 @@ export type Bucket = {
 };
 
 export function stateNormalize(state: string): string {
-  switch (state) {
-    case 'pending':
-      return 'Pending';
-    case 'running':
-      return 'Running';
-    case 'shutting-down':
-      return 'Shutting-Down';
-    case 'stopped':
-      return 'Stopped';
-    case 'stopping':
-      return 'Stopping';
-    case 'terminated':
-      return 'Terminated';
-    case 'PENDING_STOP':
-      return 'Shutting-Down';
-    case 'PROVISIONING':
-      return 'Provisioning';
-    case 'REPAIRING':
-      return 'Repairing';
-    case 'RUNNING':
-      return 'Running';
-    case 'STOPPING':
-      return 'Stopping';
-    case 'STAGING':
-      return 'Staging';
-    case 'SUSPENDED':
-      return 'Suspended';
-    case 'SUSPENDING':
-      return 'Suspending';
-    case 'TERMINATED':
-      return 'Stopped';
-    default:
-      return '';
-  }
+  const states: Record<string, string> = {
+    pending: 'Pending',
+    running: 'Running',
+    'shutting-down': 'Shutting-Down',
+    stopped: 'Stopped',
+    stopping: 'Stopping',
+    terminated: 'Terminated',
+    PENDING_STOP: 'Shutting-Down',
+    PROVISIONING: 'Provisioning',
+    REPAIRING: 'Repairing',
+    RUNNING: 'Running',
+    STOPPING: 'Stopping',
+    STAGING: 'Staging',
+    SUSPENDED: 'Suspended',
+    SUSPENDING: 'Suspending',
+    TERMINATED: 'Stopped',
+  };
+  return states[state];
 }
 
 // needed if private key is pasted with literal '\n'

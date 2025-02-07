@@ -22,6 +22,7 @@ export async function getAllAwsVmInstances(
 ): Promise<VirtualMachine[]> {
   const VMsInfo: VirtualMachine[] = [];
 
+  // regions to scan
   const regions = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2'];
   for (const region of regions) {
     const client = new EC2Client({
@@ -34,6 +35,7 @@ export async function getAllAwsVmInstances(
 
     const command = new DescribeInstancesCommand();
     const response = await client.send(command);
+    // EC2 response is organized as reservations of instances
     const { Reservations } = response;
     if (Reservations) {
       for (const reservation of Reservations) {

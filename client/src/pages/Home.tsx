@@ -25,11 +25,7 @@ export function Home() {
           </Link>
         </>
       )}
-      {/* {user && (
-        <p>
-          Signed in as {user.username} with ID: {user.userId}
-        </p>
-      )} */}
+      {user && <p>Hello {user.username}!</p>}
       {user && <AccountList />}
     </>
   );

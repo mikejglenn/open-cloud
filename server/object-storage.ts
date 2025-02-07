@@ -1,7 +1,7 @@
 import { db } from './db';
 import { Account } from './account';
-import { getAllAwsBuckets } from './awsS3';
-import { getAllGcpBuckets } from './gcpCloudStorage';
+import { getAllAwsBuckets } from './aws-s3';
+import { getAllGcpBuckets } from './gcp-cloud-storage';
 
 export type Bucket = {
   name: string;
@@ -18,7 +18,8 @@ async function dbSelectAccountBuckets(accountId: number): Promise<Bucket[]> {
     "region", "creationDate", "lastSeen"
       from "buckets" as "b"
       join "accounts" as "a" using ("accountId")
-     where "accountId" = $1;
+     where "accountId" = $1
+     order by "bucketId";
   `;
   const result = await db.query<Bucket>(sql, [accountId]);
   return result.rows;
