@@ -41,11 +41,11 @@ export function AccountList() {
 
   return (
     <>
-      <h2 className="text-2xl">Accounts</h2>
+      <h2 className="text-2xl m-2">Accounts</h2>
       <Link to="/accounts/new" className="btn text-xl">
-        NEW
+        Create New Account
       </Link>
-      <ul>
+      <ul className="flex flex-wrap">
         {accounts.length === 0 && <span>There are no accounts.</span>}
         {accounts.map((account) => (
           <AccountCard key={account.accountId} account={account} />

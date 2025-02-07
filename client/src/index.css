@@ -2,6 +2,6 @@
 /* prettier-ignore */
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: business --default;
+  themes: business --default, corporate;
 }
 /* stylelint-enable */

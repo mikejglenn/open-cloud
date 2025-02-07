@@ -7,7 +7,7 @@ export function Inventory() {
   if (!user) return null;
 
   return (
-    <>
+    <div className="flex flex-col items-center">
       <Link
         to="/inventory/virtual-machines"
         className="card bg-neutral text-neutral-content w-96 mb-2">
@@ -24,11 +24,11 @@ export function Inventory() {
       </Link>
       <Link
         to="/inventory/managed-databases"
-        className="card bg-neutral text-neutral-content w-96 mb-2">
+        className="card bg-neutral text-neutral-content w-96 mb-2 hidden">
         <div className="card-body items-center text-center">
           <h2 className="card-title">Managed Databases</h2>
         </div>
       </Link>
-    </>
+    </div>
   );
 }
