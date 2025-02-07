@@ -11,12 +11,16 @@ export type UserContextValues = {
   token: string | undefined;
   handleSignIn: (user: User, token: string) => void;
   handleSignOut: () => void;
+  theme: string | undefined;
+  toggleTheme: () => void;
 };
 export const UserContext = createContext<UserContextValues>({
   user: undefined,
   token: undefined,
   handleSignIn: () => undefined,
   handleSignOut: () => undefined,
+  theme: undefined,
+  toggleTheme: () => undefined,
 });
 
 type Props = {
@@ -25,6 +29,7 @@ type Props = {
 export function UserProvider({ children }: Props) {
   const [user, setUser] = useState<User>();
   const [token, setToken] = useState<string>();
+  const [theme, setTheme] = useState<string>();
 
   useEffect(() => {
     setUser(readUser());
@@ -43,7 +48,20 @@ export function UserProvider({ children }: Props) {
     removeAuth();
   }
 
-  const contextValue = { user, token, handleSignIn, handleSignOut };
+  function toggleTheme() {
+    setTheme((prevTheme) =>
+      prevTheme === 'business' ? 'corporate' : 'business'
+    );
+  }
+
+  const contextValue = {
+    user,
+    token,
+    handleSignIn,
+    handleSignOut,
+    theme,
+    toggleTheme,
+  };
 
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>

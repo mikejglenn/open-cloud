@@ -34,8 +34,7 @@ export function RegistrationForm() {
   }
 
   return (
-    <>
-      <h2 className="text-3xl">Register now!</h2>
+    <div className="flex flex-col items-center">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
         <form className="card-body" onSubmit={handleSubmit}>
           <fieldset className="fieldset">
@@ -68,6 +67,6 @@ export function RegistrationForm() {
           </fieldset>
         </form>
       </div>
-    </>
+    </div>
   );
 }

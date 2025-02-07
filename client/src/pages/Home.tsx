@@ -6,7 +6,7 @@ export function Home() {
   const { user } = useUser();
 
   return (
-    <>
+    <div className="flex flex-col items-center">
       {!user && (
         <>
           <Link
@@ -25,8 +25,12 @@ export function Home() {
           </Link>
         </>
       )}
-      {user && <p>Hello {user.username}!</p>}
-      {user && <AccountList />}
-    </>
+      {user && (
+        <>
+          <p>Hello {user.username}</p>
+          <AccountList />
+        </>
+      )}
+    </div>
   );
 }

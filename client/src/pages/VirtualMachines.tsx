@@ -70,7 +70,7 @@ export function VirtualMachines() {
         <table className="table table-zebra whitespace-nowrap">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Instance Name</th>
               <th>Provider</th>
               <th>Account</th>
               <th>Region</th>

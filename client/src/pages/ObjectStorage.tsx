@@ -70,7 +70,7 @@ export function ObjectStorage() {
         <table className="table table-zebra whitespace-nowrap">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Bucket Name</th>
               <th>Provider</th>
               <th>Account</th>
               <th>Region</th>
