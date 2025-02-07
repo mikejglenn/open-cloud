@@ -30,7 +30,7 @@ jobs:
           remote_path: /home/ec2-user/project/
           remote_host: ${{ env.EC2_HOST }}
           remote_user: ec2-user
-          remote_key: "${{ env.SSH_PRIVATE_KEY }}"
+          remote_key: '${{ env.SSH_PRIVATE_KEY }}'
       - name: Install and run on EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -40,5 +40,5 @@ jobs:
           script: |
             cd /home/ec2-user/project
             sh scripts/ec2env.sh
-            npm run db:import
+            # npm run db:import
             pm2 start --time npm -- start
