@@ -31,7 +31,7 @@ Try the application live at [https://opencloud.osgcode.com/](https://opencloud.o
 
 ## Preview
 
-<img width="755" alt="image" src="https://github.com/user-attachments/assets/53024844-b32b-4c4c-afdb-fd9b29ab8585" />
+<img width="589" alt="image" src="https://github.com/user-attachments/assets/672bcd6c-e82e-4e54-a31d-c54ca5abf1d0" />
 
 ## Development
 
