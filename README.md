@@ -31,7 +31,7 @@ Try the application live at [https://opencloud.osgcode.com/](https://opencloud.o
 
 ## Preview
 
-<!-- ![SGT React](assets/sgt-react.gif) -->
+<img width="755" alt="image" src="https://github.com/user-attachments/assets/53024844-b32b-4c4c-afdb-fd9b29ab8585" />
 
 ## Development
 
