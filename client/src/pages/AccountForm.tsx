@@ -53,7 +53,8 @@ export function AccountForm() {
     navigate('/');
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return <span className="loading loading-spinner loading-lg"></span>;
   if (error) {
     return (
       <div>
@@ -128,7 +129,7 @@ export function AccountForm() {
           {!provider || provider === 'AWS' ? 'Access Key' : 'Client Email'}
         </label>
         <input
-          type="text"
+          type="password"
           className="input block"
           name="credentialIdentity"
           defaultValue={account?.credentialIdentity ?? ''}
