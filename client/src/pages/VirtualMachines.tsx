@@ -45,7 +45,7 @@ export function VirtualMachines() {
   if (error) {
     return (
       <div>
-        Error Loading Accounts:{' '}
+        Error Loading Virtual Machines:{' '}
         {error instanceof Error ? error.message : 'Unknown Error'}
       </div>
     );
@@ -94,8 +94,7 @@ export function VirtualMachines() {
             {virtualMachines
               .filter((fvm) =>
                 Object.values(fvm).find((v) =>
-                  v
-                    ?.toString()
+                  `${v}`
                     .toLocaleLowerCase()
                     .includes(searchInput.toLocaleLowerCase())
                 )

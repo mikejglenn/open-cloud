@@ -14,6 +14,7 @@ export function AccountList() {
   useEffect(() => {
     async function load() {
       try {
+        setIsLoading(true);
         if (user) {
           const accounts = await readAccounts();
           setAccount(accounts);
@@ -27,7 +28,8 @@ export function AccountList() {
     load();
   }, [user]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return <span className="loading loading-spinner loading-lg"></span>;
   if (error) {
     return (
       <div>

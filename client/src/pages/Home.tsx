@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { User, useUser } from '../components/useUser';
 import { AccountList } from './AccountList';
-import { useState } from 'react';
 
 type AuthData = {
   user: User;
@@ -10,12 +9,10 @@ type AuthData = {
 
 export function Home() {
   const { handleSignIn, user } = useUser();
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleGuestClick() {
     try {
-      setIsLoading(true);
       const req = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,8 +27,6 @@ export function Home() {
       navigate('/');
     } catch (err) {
       alert(`Error signing in: ${err}`);
-    } finally {
-      setIsLoading(false);
     }
   }
 
@@ -54,7 +49,6 @@ export function Home() {
             </div>
           </Link>
           <div
-            hidden={isLoading}
             onClick={handleGuestClick}
             className="card bg-neutral text-neutral-content w-96 mb-2">
             <div className="card-body items-center text-center">
