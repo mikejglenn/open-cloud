@@ -55,6 +55,7 @@ export function ObjectStorage() {
 
   return (
     <>
+      <h2 className="text-2xl mb-2">Object Storage</h2>
       <label className="input" htmlFor="search">
         <FaMagnifyingGlass
           className="opacity-50"

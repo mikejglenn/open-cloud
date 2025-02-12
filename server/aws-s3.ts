@@ -6,7 +6,7 @@ import { Bucket } from './object-storage';
 export async function getAllAwsBuckets(account: Account): Promise<Bucket[]> {
   const bucketsInfo: Bucket[] = [];
 
-  // any region can be used since S3 is global
+  // doesn't matter which region is used since S3 is global
   const region = 'us-west-1';
   const client = new S3Client({
     region,
@@ -16,7 +16,7 @@ export async function getAllAwsBuckets(account: Account): Promise<Bucket[]> {
     },
   });
 
-  // any input argument (like MaxBuckets) needed to return BucketRegion
+  // needs an input argument (like MaxBuckets) to return BucketRegion
   const command = new ListBucketsCommand({ MaxBuckets: 200 });
   const response = await client.send(command);
   const { Buckets } = response;

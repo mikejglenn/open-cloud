@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from './useUser';
-import { FaBars /*, FaEllipsis*/ } from 'react-icons/fa6';
+import { FaBars } from 'react-icons/fa6';
 import { LuMoon, LuSun } from 'react-icons/lu';
 import { IoMdExit } from 'react-icons/io';
 import { useState } from 'react';
@@ -15,10 +15,12 @@ export function Header() {
       <header className="p-4 bg-base-300 relative">
         <div className="navbar shadow-sm flex justify-between items-center">
           <div>
-            <FaBars
-              className="inline sm:hidden"
-              onClick={() => setMobileMenu(!mobileMenu)}
-            />
+            {user && (
+              <FaBars
+                className="inline sm:hidden"
+                onClick={() => setMobileMenu(!mobileMenu)}
+              />
+            )}
             <NavLink to="/" className="btn text-2xl">
               <span className="uppercase text-accent">Open</span>
               <span className="uppercase">Cloud</span>
@@ -73,31 +75,36 @@ export function Header() {
             </div>
           )}
         </div>
-        <ul
-          className="menu bg-accent w-56 absolute bg-opacity-0"
-          hidden={mobileMenu}>
-          <li>
-            <NavLink
-              to="/inventory/virtual-machines"
-              className={({ isActive }) => (isActive ? 'menu-active' : '')}>
-              Virtual Machines
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/inventory/object-storage"
-              className={({ isActive }) => (isActive ? 'menu-active' : '')}>
-              Object Storage
-            </NavLink>
-          </li>
-          <li className="hidden">
-            <NavLink
-              to="/inventory/managed-databases"
-              className={({ isActive }) => (isActive ? 'menu-active' : '')}>
-              Managed Databases
-            </NavLink>
-          </li>
-        </ul>
+        {user && (
+          <ul
+            className="menu bg-base-200 w-56 absolute z-10"
+            hidden={mobileMenu}>
+            <li>
+              <NavLink
+                onClick={() => setMobileMenu(!mobileMenu)}
+                to="/inventory/virtual-machines"
+                className={({ isActive }) => (isActive ? 'menu-active ' : '')}>
+                Virtual Machines
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                onClick={() => setMobileMenu(!mobileMenu)}
+                to="/inventory/object-storage"
+                className={({ isActive }) => (isActive ? 'menu-active ' : '')}>
+                Object Storage
+              </NavLink>
+            </li>
+            <li className="hidden">
+              <NavLink
+                onClick={() => setMobileMenu(!mobileMenu)}
+                to="/inventory/managed-databases"
+                className={({ isActive }) => (isActive ? 'menu-active ' : '')}>
+                Managed Databases
+              </NavLink>
+            </li>
+          </ul>
+        )}
       </header>
 
       <div className="flex flex-row flex-grow">

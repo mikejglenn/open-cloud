@@ -55,6 +55,7 @@ export function VirtualMachines() {
 
   return (
     <>
+      <h2 className="text-2xl mb-2">Virtual Machines</h2>
       <label className="input" htmlFor="search">
         <FaMagnifyingGlass
           className="opacity-50"
