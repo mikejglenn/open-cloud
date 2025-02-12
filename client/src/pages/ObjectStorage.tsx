@@ -45,7 +45,7 @@ export function ObjectStorage() {
   if (error) {
     return (
       <div>
-        Error Loading Accounts:{' '}
+        Error Loading Buckets:{' '}
         {error instanceof Error ? error.message : 'Unknown Error'}
       </div>
     );
@@ -86,8 +86,7 @@ export function ObjectStorage() {
             {buckets
               .filter((fb) =>
                 Object.values(fb).find((b) =>
-                  b
-                    ?.toString()
+                  `${b}`
                     .toLocaleLowerCase()
                     .includes(searchInput.toLocaleLowerCase())
                 )
