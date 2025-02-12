@@ -17,10 +17,12 @@ export function VirtualMachines() {
   useEffect(() => {
     async function load() {
       try {
+        setIsLoading(true);
         if (user) {
           // stale while refresh call. first refresh from db then refresh 'yes'
           let virtualMachines = await readVirtualMachines('');
           setVirtualMachines(virtualMachines);
+          setIsLoading(false);
           virtualMachines = await readVirtualMachines('yes');
           setVirtualMachines(virtualMachines);
         }
@@ -38,7 +40,8 @@ export function VirtualMachines() {
     setVirtualMachine(vm);
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return <span className="loading loading-spinner loading-lg"></span>;
   if (error) {
     return (
       <div>
@@ -52,6 +55,7 @@ export function VirtualMachines() {
 
   return (
     <>
+      <h2 className="text-2xl mb-2">Virtual Machines</h2>
       <label className="input" htmlFor="search">
         <FaMagnifyingGlass
           className="opacity-50"

@@ -45,7 +45,7 @@ export function AccountList() {
       <Link to="/accounts/new" className="btn text-xl">
         Create New Account
       </Link>
-      <ul className="flex flex-wrap">
+      <ul className="flex flex-wrap justify-center">
         {accounts.length === 0 && <span>There are no accounts.</span>}
         {accounts.map((account) => (
           <AccountCard key={account.accountId} account={account} />

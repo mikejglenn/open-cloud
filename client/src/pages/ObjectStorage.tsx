@@ -17,10 +17,12 @@ export function ObjectStorage() {
   useEffect(() => {
     async function load() {
       try {
+        setIsLoading(true);
         if (user) {
           // stale while refresh call. first refresh from db then refresh 'yes'
           let buckets = await readBuckets('no');
           setBuckets(buckets);
+          setIsLoading(false);
           buckets = await readBuckets('yes');
           setBuckets(buckets);
         }
@@ -38,7 +40,8 @@ export function ObjectStorage() {
     setBucket(bucket);
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return <span className="loading loading-spinner loading-lg"></span>;
   if (error) {
     return (
       <div>
@@ -52,6 +55,7 @@ export function ObjectStorage() {
 
   return (
     <>
+      <h2 className="text-2xl mb-2">Object Storage</h2>
       <label className="input" htmlFor="search">
         <FaMagnifyingGlass
           className="opacity-50"
