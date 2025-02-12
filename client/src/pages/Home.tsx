@@ -50,7 +50,7 @@ export function Home() {
           </Link>
           <div
             onClick={handleGuestClick}
-            className="card bg-neutral text-neutral-content w-96 mb-2">
+            className="card bg-neutral text-neutral-content w-96 mb-2 cursor-pointer">
             <div className="card-body items-center text-center">
               <h2 className="card-title">Continue As Guest</h2>
             </div>
