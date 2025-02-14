@@ -21,7 +21,7 @@ As a having previously worked in cloud support and operations, I wanted to build
 
 ## Live Demo
 
-Try the application live at [https://opencloud.osgcode.com/](https://opencloud.osgcode.com/)
+Try the application live at [https://opencloud.mikeglenn.net/](https://opencloud.mikeglenn.net/)
 
 ## Features
 
