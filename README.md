@@ -15,7 +15,7 @@ As a having previously worked in cloud support and operations, I wanted to build
 - PostgreSQL
 - TailwindCSS
 - DaisyUI
-- AWS - EC2, RDS, ELB
+- AWS - EC2, RDS, S3
 - AWS SDK for JavaScript v3
 - Google Cloud API - Node.js Cloud Client Libraries
 
