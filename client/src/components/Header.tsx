@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from './useUser';
-import { FaBars } from 'react-icons/fa6';
+import { FaBars, FaRegCircleUser } from 'react-icons/fa6';
 import { LuMoon, LuSun } from 'react-icons/lu';
 import { IoMdExit } from 'react-icons/io';
 import { useState } from 'react';
@@ -52,7 +52,7 @@ export function Header() {
             )}
           </div>
           {user && (
-            <div>
+            <div className="flex">
               <label className="swap swap-rotate hidden">
                 <input
                   type="checkbox"
@@ -62,6 +62,8 @@ export function Header() {
                 <LuMoon className="swap-off h-5 w-5 fill-current" />
                 <LuSun className="swap-on h-5 w-5 fill-current" />
               </label>
+
+              <FaRegCircleUser className="text-3xl hidden" />
 
               <IoMdExit
                 title="Sign Out"
