@@ -1,6 +1,6 @@
 # open-cloud
 
-A full stack PERN application for cloud users who want to inventory cloud resources.
+A full stack PERN (PostgreSQL, Express.js, React, Node.js) application for cloud users who want to inventory cloud resources.
 
 ## Why I Built This
 
