@@ -16,10 +16,46 @@ export function Header() {
         <div className="navbar shadow-sm flex justify-between items-center">
           <div>
             {user && (
-              <FaBars
-                className="inline sm:hidden"
-                onClick={() => setMobileMenu(!mobileMenu)}
-              />
+              <>
+                <FaBars
+                  className="inline sm:hidden"
+                  onClick={() => setMobileMenu(!mobileMenu)}
+                />
+                <ul
+                  className="menu bg-base-200 w-56 absolute z-10"
+                  hidden={mobileMenu}>
+                  <li>
+                    <NavLink
+                      onClick={() => setMobileMenu(!mobileMenu)}
+                      to="/inventory/virtual-machines"
+                      className={({ isActive }) =>
+                        isActive ? 'menu-active ' : ''
+                      }>
+                      Virtual Machines
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      onClick={() => setMobileMenu(!mobileMenu)}
+                      to="/inventory/object-storage"
+                      className={({ isActive }) =>
+                        isActive ? 'menu-active ' : ''
+                      }>
+                      Object Storage
+                    </NavLink>
+                  </li>
+                  <li className="hidden">
+                    <NavLink
+                      onClick={() => setMobileMenu(!mobileMenu)}
+                      to="/inventory/managed-databases"
+                      className={({ isActive }) =>
+                        isActive ? 'menu-active ' : ''
+                      }>
+                      Managed Databases
+                    </NavLink>
+                  </li>
+                </ul>
+              </>
             )}
             <NavLink to="/" className="btn text-2xl">
               <span className="uppercase text-accent">Open</span>
@@ -77,36 +113,6 @@ export function Header() {
             </div>
           )}
         </div>
-        {user && (
-          <ul
-            className="menu bg-base-200 w-56 absolute z-10"
-            hidden={mobileMenu}>
-            <li>
-              <NavLink
-                onClick={() => setMobileMenu(!mobileMenu)}
-                to="/inventory/virtual-machines"
-                className={({ isActive }) => (isActive ? 'menu-active ' : '')}>
-                Virtual Machines
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                onClick={() => setMobileMenu(!mobileMenu)}
-                to="/inventory/object-storage"
-                className={({ isActive }) => (isActive ? 'menu-active ' : '')}>
-                Object Storage
-              </NavLink>
-            </li>
-            <li className="hidden">
-              <NavLink
-                onClick={() => setMobileMenu(!mobileMenu)}
-                to="/inventory/managed-databases"
-                className={({ isActive }) => (isActive ? 'menu-active ' : '')}>
-                Managed Databases
-              </NavLink>
-            </li>
-          </ul>
-        )}
       </header>
 
       <div className="flex flex-row flex-grow">
