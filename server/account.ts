@@ -14,10 +14,10 @@ export type Account = {
 
 export async function getAccountsByUserId(userId: number): Promise<Account[]> {
   const sql = `
-    select *
-    from "accounts"
-    where "userId" = $1
-    order by "accountId";
+    SELECT *
+    FROM "accounts"
+    WHERE "userId" = $1
+    ORDER BY "accountId";
   `;
   const result = await db.query<Account>(sql, [userId]);
   const accounts = result.rows;
@@ -29,9 +29,9 @@ export async function getAccountByAccountId(
   accountId: number
 ): Promise<Account> {
   const sql = `
-    select *
-    from "accounts"
-    where "userId" = $1 and "accountId" = $2;
+    SELECT *
+    FROM "accounts"
+    WHERE "userId" = $1 AND "accountId" = $2;
   `;
   const params = [userId, accountId];
   const result = await db.query<Account>(sql, params);
@@ -57,10 +57,10 @@ export async function createAccount(
     throw new ClientError(400, 'account info is missing');
   }
   const sql = `
-    insert into "accounts" ("userId", "name", "provider", "account",
+    INSERT INTO "accounts" ("userId", "name", "provider", "account",
     "credentialIdentity", "credentialSecret")
-    values ($1, $2, $3, $4, $5, $6)
-    returning *;
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *;
   `;
   const params = [
     userId,
@@ -92,15 +92,15 @@ export async function updateAccount(
     throw new ClientError(400, 'account info is missing');
   }
   const sql = `
-    update "accounts"
-       set "updatedAt"              = now(),
+    UPDATE "accounts"
+       SET "updatedAt"              = now(),
            "name"                   = $3,
            "provider"               = $4,
            "account"                = $5,
            "credentialIdentity"     = $6,
            "credentialSecret"       = $7
-     where "userId" = $1 and "accountId" = $2
-    returning *;
+     WHERE "userId" = $1 AND "accountId" = $2
+    RETURNING *;
   `;
   const params = [
     userId,
@@ -121,9 +121,9 @@ export async function deleteAccount(
   accountId: number
 ): Promise<Account> {
   const sql = `
-    delete from "accounts"
-    where "userId" = $1 and "accountId" = $2
-    returning *;
+    DELETE FROM "accounts"
+    WHERE "userId" = $1 AND "accountId" = $2
+    RETURNING *;
   `;
   const params = [userId, accountId];
   const result = await db.query<Account>(sql, params);

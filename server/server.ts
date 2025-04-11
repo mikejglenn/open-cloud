@@ -1,8 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import { ClientError, errorMiddleware, authMiddleware } from './lib';
-import { User, Auth, userSignIn, userSignUp, PayloadForToken } from './user';
+import { User, Auth, userSignIn, userSignUp, TokenUser } from './user';
 import {
   Account,
   createAccount,
@@ -13,9 +12,6 @@ import {
 } from './account';
 import { getAllVMs, VirtualMachine } from './virtual-machines';
 import { Bucket, getAllBuckets } from './object-storage';
-
-export const hashKey = process.env.TOKEN_SECRET;
-if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
 
 const app = express();
 
@@ -47,9 +43,8 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     if (!username || !password) {
       throw new ClientError(401, 'invalid login');
     }
-    const payload = (await userSignIn(username, password)) as PayloadForToken;
-    const token = jwt.sign(payload, hashKey);
-    res.json({ token, user: payload });
+    const tokenUser = (await userSignIn(username, password)) as TokenUser;
+    res.json(tokenUser);
   } catch (err) {
     next(err);
   }

@@ -26,14 +26,14 @@ async function dbSelectAccountVMs(
   accountId: number
 ): Promise<VirtualMachine[]> {
   const sql = `
-    select "v"."name", "provider", "a"."name" as "accountName", "account",
+    SELECT "v"."name", "provider", "a"."name" AS "accountName", "account",
     "instanceId", "region", "zone", "vpcId", "subnetId", "instanceState",
     "instanceType", "instanceOs", "privateIp", "publicIp", "tags",
     "launchTime", "lastSeen"
-      from "virtualMachines" as "v"
-      join "accounts" as "a" using ("accountId")
-     where "accountId" = $1
-     order by "virtualMachineId";
+      FROM "virtualMachines" AS "v"
+      JOIN "accounts" AS "a" USING ("accountId")
+     WHERE "accountId" = $1
+     ORDER BY "virtualMachineId";
   `;
   const result = await db.query<VirtualMachine>(sql, [accountId]);
   return result.rows;
@@ -45,12 +45,12 @@ async function dbWriteVMs(
 ): Promise<void> {
   for (const vm of virtualMachines) {
     const sql = `
-      insert into "virtualMachines" ("accountId", "name", "instanceId",
+      INSERT INTO "virtualMachines" ("accountId", "name", "instanceId",
       "region", "zone", "vpcId", "subnetId", "instanceState", "instanceType",
       "instanceOs", "privateIp", "publicIp", "tags", "launchTime", "lastSeen")
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
-      on conflict ("instanceId")
-      do update set "updatedAt"         = now(),
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+      ON CONFLICT ("instanceId")
+      DO UPDATE SET "updatedAt"         = now(),
                     "name"              = $2,
                     "instanceState"     = $8,
                     "instanceType"      = $9,
@@ -60,7 +60,7 @@ async function dbWriteVMs(
                     "tags"              = $13,
                     "launchTime"        = $14,
                     "lastSeen"          = $15
-      returning *;
+      RETURNING *;
     `;
     const params = [
       accountId,

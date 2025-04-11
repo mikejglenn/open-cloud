@@ -1,4 +1,5 @@
 import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
 import { ClientError } from './lib';
 import { db } from './db';
 
@@ -11,10 +12,17 @@ export type Auth = {
   username: string;
   password: string;
 };
-export type PayloadForToken = {
+type PayloadForToken = {
   userId: number;
   username: string;
 };
+export type TokenUser = {
+  token: string;
+  user: PayloadForToken;
+};
+
+const hashKey = process.env.TOKEN_SECRET;
+if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
 
 export async function userSignUp(
   username: string,
@@ -22,9 +30,9 @@ export async function userSignUp(
 ): Promise<User> {
   const hashedPassword = await argon2.hash(password);
   const sql = `
-        insert into "users" ("username", "hashedPassword")
-        values ($1, $2)
-        returning "userId", "username", "createdAt";
+        INSERT INTO "users" ("username", "hashedPassword")
+        VALUES ($1, $2)
+        RETURNING "userId", "username", "createdAt";
       `;
   const params = [username, hashedPassword];
   const result = await db.query<User>(sql, params);
@@ -35,12 +43,12 @@ export async function userSignUp(
 export async function userSignIn(
   username: string,
   password: string
-): Promise<PayloadForToken> {
+): Promise<TokenUser> {
   const sql = `
-    select "userId",
+    SELECT "userId",
            "hashedPassword"
-      from "users"
-     where "username" = $1;
+      FROM "users"
+     WHERE "username" = $1;
   `;
   const params = [username];
   const result = await db.query<User>(sql, params);
@@ -52,5 +60,8 @@ export async function userSignIn(
   if (!(await argon2.verify(hashedPassword, password))) {
     throw new ClientError(401, 'invalid login');
   }
-  return { userId, username };
+  const payload = { userId, username };
+  if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
+  const token = jwt.sign(payload, hashKey);
+  return { token, user: payload };
 }
