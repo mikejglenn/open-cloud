@@ -212,22 +212,22 @@ export async function readBuckets(refresh: string): Promise<Bucket[]> {
 
 export function downloadCsv(resourceArray: VirtualMachine[] | Bucket[]): void {
   window.open(
-    encodeURIComponent(
-      'data:text/csv;charset=utf-8,' +
+    'data:text/csv;charset=utf-8,' +
+      encodeURIComponent(
         Object.keys(resourceArray[0])
           .map((v) => v.replaceAll('"', '""'))
           .map((v) => `"${v}"`)
           .join(',') +
-        '\n' +
-        resourceArray
-          .map((e) =>
-            Object.values(e)
-              .map(String)
-              .map((v) => v.replaceAll('"', '""'))
-              .map((v) => `"${v}"`)
-              .join(',')
-          )
-          .join('\n')
-    )
+          '\n' +
+          resourceArray
+            .map((e) =>
+              Object.values(e)
+                .map(String)
+                .map((v) => v.replaceAll('"', '""'))
+                .map((v) => `"${v}"`)
+                .join(',')
+            )
+            .join('\n')
+      )
   );
 }
