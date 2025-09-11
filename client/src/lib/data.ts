@@ -209,3 +209,25 @@ export async function readBuckets(refresh: string): Promise<Bucket[]> {
   const data = (await response.json()) as Bucket[];
   return data;
 }
+
+export function downloadCsv(resourceArray: VirtualMachine[] | Bucket[]): void {
+  window.open(
+    encodeURI(
+      'data:text/csv;charset=utf-8,' +
+        Object.keys(resourceArray[0])
+          .map((v) => v.replaceAll('"', '""'))
+          .map((v) => `"${v}"`)
+          .join(',') +
+        '\n' +
+        resourceArray
+          .map((e) =>
+            Object.values(e)
+              .map(String)
+              .map((v) => v.replaceAll('"', '""'))
+              .map((v) => `"${v}"`)
+              .join(',')
+          )
+          .join('\n')
+    )
+  );
+}
