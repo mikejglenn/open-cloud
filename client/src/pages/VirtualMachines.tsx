@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '../components/useUser';
-import { VirtualMachine, readVirtualMachines, stateNormalize } from '../lib';
+import {
+  VirtualMachine,
+  readVirtualMachines,
+  stateNormalize,
+  downloadCsv,
+} from '../lib';
 import { VmCard } from '../components/VmCard';
 import { FiExternalLink } from 'react-icons/fi';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
@@ -56,7 +61,7 @@ export function VirtualMachines() {
   return (
     <>
       <h2 className="text-2xl mb-2">Virtual Machines</h2>
-      <label className="input" htmlFor="search">
+      <label className="input mb-2" htmlFor="search">
         <FaMagnifyingGlass
           className="opacity-50"
           style={{ paddingTop: '2px' }}
@@ -70,6 +75,11 @@ export function VirtualMachines() {
           onChange={(e) => setSearchInput(e.target.value)}
         />
       </label>
+      <button
+        className="btn ml-2 mb-2"
+        onClick={() => downloadCsv(virtualMachines)}>
+        Download CSV
+      </button>
       <div className="overflow-x-auto border-2 border-base-300">
         <table className="table table-zebra whitespace-nowrap">
           <thead>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '../components/useUser';
-import { Bucket, readBuckets } from '../lib';
+import { Bucket, readBuckets, downloadCsv } from '../lib';
 import { BucketCard } from '../components/BucketCard';
 import { FiExternalLink } from 'react-icons/fi';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
@@ -56,7 +56,7 @@ export function ObjectStorage() {
   return (
     <>
       <h2 className="text-2xl mb-2">Object Storage</h2>
-      <label className="input" htmlFor="search">
+      <label className="input mb-2" htmlFor="search">
         <FaMagnifyingGlass
           className="opacity-50"
           style={{ paddingTop: '2px' }}
@@ -70,6 +70,9 @@ export function ObjectStorage() {
           onChange={(e) => setSearchInput(e.target.value)}
         />
       </label>
+      <button className="btn ml-2 mb-2" onClick={() => downloadCsv(buckets)}>
+        Download CSV
+      </button>
       <div className="overflow-x-auto border-2 border-base-300">
         <table className="table table-zebra whitespace-nowrap">
           <thead>
