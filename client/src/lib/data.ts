@@ -212,7 +212,7 @@ export async function readBuckets(refresh: string): Promise<Bucket[]> {
 
 export function downloadCsv(resourceArray: VirtualMachine[] | Bucket[]): void {
   window.open(
-    encodeURI(
+    encodeURIComponent(
       'data:text/csv;charset=utf-8,' +
         Object.keys(resourceArray[0])
           .map((v) => v.replaceAll('"', '""'))
