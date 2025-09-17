@@ -211,23 +211,35 @@ export async function readBuckets(refresh: string): Promise<Bucket[]> {
 }
 
 export function downloadCsv(resourceArray: VirtualMachine[] | Bucket[]): void {
-  window.open(
-    'data:text/csv;charset=utf-8,' +
-      encodeURIComponent(
-        Object.keys(resourceArray[0])
+  const csvContent =
+    Object.keys(resourceArray[0])
+      .map((v) => v.replaceAll('"', '""'))
+      .map((v) => `"${v}"`)
+      .join(',') +
+    '\n' +
+    resourceArray
+      .map((e) =>
+        Object.values(e)
+          .map(String)
           .map((v) => v.replaceAll('"', '""'))
           .map((v) => `"${v}"`)
-          .join(',') +
-          '\n' +
-          resourceArray
-            .map((e) =>
-              Object.values(e)
-                .map(String)
-                .map((v) => v.replaceAll('"', '""'))
-                .map((v) => `"${v}"`)
-                .join(',')
-            )
-            .join('\n')
+          .join(',')
       )
-  );
+      .join('\n');
+
+  const blob = new Blob([csvContent], {
+    type: 'text/csv;charset=utf-8;\uFEFF',
+  });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'download.csv';
+  link.style.display = 'none';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
 }
